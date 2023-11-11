@@ -17,10 +17,7 @@
 
   <ItemGroup>
 	<Folder Include="Controllers\ModuloAtividade\" />
-	<Folder Include="Controllers\ModuloMedico\" />
     <Folder Include="Filters\" />
-    <Folder Include="Config\" />
-    <Folder Include="ViewModels\" />
   </ItemGroup>
 
   <ItemGroup>

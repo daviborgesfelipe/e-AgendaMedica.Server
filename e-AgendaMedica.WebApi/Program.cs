@@ -1,3 +1,8 @@
+using e_AgendaMedica.WebApi.Config.AutoMapperConfig;
+using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
+
 namespace e_AgendaMedica.WebApi
 {
     public class Program
@@ -6,7 +11,14 @@ namespace e_AgendaMedica.WebApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            ValidatorOptions.Global.LanguageManager.Culture = new CultureInfo("pt-BR");
+            
+            builder.Services.Configure<ApiBehaviorOptions>(config =>
+            {
+                config.SuppressModelStateInvalidFilter = true;
+            });
+
+            builder.Services.ConfigurarAutoMapper();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -25,7 +37,6 @@ namespace e_AgendaMedica.WebApi
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
