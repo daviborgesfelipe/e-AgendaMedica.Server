@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -13,9 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-	<Folder Include="Compartilhado\" />
 	<Folder Include="ModuloAtividade\" />
-  	<Folder Include="ModuloMedico\" />
   </ItemGroup>
 	
   <ItemGroup>

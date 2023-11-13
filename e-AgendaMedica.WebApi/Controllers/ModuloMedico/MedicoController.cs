@@ -1,19 +1,22 @@
-﻿using AutoMapper;
+﻿using e_AgendaMedica.Aplicacao.ModuloMedico;
 using e_AgendaMedica.Dominio.ModuloMedico;
+using e_AgendaMedica.WebApi.Controllers.Compartilhado;
 using e_AgendaMedica.WebApi.ViewModels.ModuloMedico;
-using Microsoft.AspNetCore.Mvc;
 
 namespace e_AgendaMedica.WebApi.Controllers.ModuloMedico
 {
     [Route("api/medicos")]
     [ApiController]
-    public class MedicoController : ControllerBase
+    public class MedicoController : ApiControllerBase
     {
         private IMapper mapeador;
+        private ServicoMedico servicoMedico;
 
-        public MedicoController(IMapper mapeador)
+
+        public MedicoController(IMapper mapeador, ServicoMedico servicoMedico)
         {
             this.mapeador = mapeador;
+            this.servicoMedico = servicoMedico;
         }
 
         [HttpPost]
@@ -24,7 +27,9 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloMedico
         {
             var contatoMap = mapeador.Map<Medico>(medicoViewModel);
 
-            return Ok(contatoMap);
+            var resultadoPost = await servicoMedico.InserirAsync(contatoMap);
+
+            return ProcessarResultado(resultadoPost.ToResult(), contatoMap);
         }
     }
 }
