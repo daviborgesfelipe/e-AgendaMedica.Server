@@ -32,6 +32,51 @@ namespace e_AgendaMedica.Aplicacao.ModuloMedico
             return Result.Ok(medico);
         }
 
+        public async Task<Result<Medico>> Editar(Medico medico)
+        {
+            var resultadoGet = await repositorioMedico.SelecionarPorIdAsync(medico.Id);
+
+            if (resultadoGet == null)
+                return Result.Fail($"Medico com ID {medico.Id} não encontrado.");
+
+            var resultadoValidacao = Validar(medico);
+
+            if (resultadoValidacao.IsFailed)
+                return Result.Fail(resultadoValidacao.Errors);
+
+            await EditarAsync(resultadoGet);
+
+            return Result.Ok(medico);
+        }
+
+        private async Task<Result<Medico>> EditarAsync(Medico medico)
+        {
+            repositorioMedico.EditarAsync(medico);
+
+            await contextoPersistencia.GravarDadosAsync();
+
+            return Result.Ok();
+        }
+         
+        public async Task<Result> Excluir(Guid id)
+        {
+            var medicoResult = await SelecionarPorIdAsync(id);
+
+            if (medicoResult.IsSuccess)
+                return await Excluir(medicoResult.Value);
+
+            return Result.Fail(medicoResult.Errors);
+        }
+
+        public async Task<Result> Excluir(Medico medico)
+        {
+            await repositorioMedico.ExcluirAsync(medico);
+
+            await contextoPersistencia.GravarDadosAsync();
+
+            return Result.Ok();
+        }
+
         public async Task<Result<Medico>> SelecionarPorIdAsync(Guid id)
         {
             var contato = await repositorioMedico.SelecionarPorIdAsync(id);

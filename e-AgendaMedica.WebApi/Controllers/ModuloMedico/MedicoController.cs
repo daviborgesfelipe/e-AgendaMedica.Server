@@ -74,5 +74,43 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloMedico
             return Ok(mapeador.Map<ListarMedicoViewModel>(resultadoGet.Value));
         }
 
+        [HttpPut("{id}")]
+        [ProducesResponseType(typeof(EditarMedicoViewModel), 200)]
+        [ProducesResponseType(typeof(string[]), 400)]
+        [ProducesResponseType(typeof(string[]), 404)]
+        [ProducesResponseType(typeof(string[]), 500)]
+        public async Task<IActionResult> Put(
+            Guid id,
+            EditarMedicoViewModel medicoViewModel
+        )
+        {
+            var resultadoGet = await servicoMedico.SelecionarPorIdAsync(id);
+
+            if (resultadoGet.IsFailed)
+                return NotFound(resultadoGet.Errors);
+
+            var medico = mapeador.Map(medicoViewModel, resultadoGet.Value);
+
+            var resultadoPut = await servicoMedico.Editar(medico);
+
+            return ProcessarResultado(resultadoPut.ToResult(), medicoViewModel);
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(string[]), 400)]
+        [ProducesResponseType(typeof(string[]), 404)]
+        [ProducesResponseType(typeof(string[]), 500)]
+        public async Task<IActionResult> DeleteById(Guid id)
+        {
+            var resultadoSelecao = await servicoMedico.SelecionarPorIdAsync(id);
+
+            if (resultadoSelecao.IsFailed)
+                return NotFound(resultadoSelecao.Errors);
+
+            var resultadoDelete = await servicoMedico.Excluir(resultadoSelecao.Value);
+
+            return ProcessarResultado(resultadoDelete);
+        }
     }
 }
