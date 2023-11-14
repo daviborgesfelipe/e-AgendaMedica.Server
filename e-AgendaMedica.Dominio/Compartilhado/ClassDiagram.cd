@@ -3,12 +3,9 @@
   <Class Name="e_AgendaMedica.Dominio.ModuloAtividade.Atividade">
     <Position X="7.5" Y="1" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAIAAAAAABAAAAAAIAAAAAAAAAIAARAAAAAAgAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAABAAAAAAIAAAAAAAAAIAARAAAAAAgAAAAAA=</HashCode>
       <FileName>ModuloAtividade\Atividade.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="MedicoResponsavel" />
-    </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Property Name="ListaMedicos" />
     </ShowAsCollectionAssociation>

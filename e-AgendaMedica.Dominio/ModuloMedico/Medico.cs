@@ -7,10 +7,9 @@ namespace e_AgendaMedica.Dominio.ModuloMedico
     public class Medico : EntidadeBase<Medico>
     {
         private string _crm;
-
         public Medico()
         {
-
+            
         }
         public Medico( string nome, string especialidade, string crm )
         {
@@ -21,19 +20,19 @@ namespace e_AgendaMedica.Dominio.ModuloMedico
         
         public string Nome { get; set; }
         public string Especialidade { get; set; }
-        public string CRM
-        {
-            get { return _crm; }
-            set
-            {
-                if (ValidarCRM(value))
-                    _crm = value;
-                else
-                    throw new ArgumentException("Formato do CRM inválido. O CRM deve ter 5 dígitos seguidos da sigla do estado (Exemplo: 12345-SP)");
-            }
-        }
-
+        public string CRM { get; set; }
         List<Atividade> ListaAtividades { get; set; }
+        //{
+        //    get { return _crm; }
+        //    set
+        //    {
+        //        if (ValidarCRM(value))
+        //            _crm = value;
+        //        else
+        //            throw new ArgumentException("Formato do CRM inválido. O CRM deve ter 5 dígitos seguidos da sigla do estado (Exemplo: 12345-SP)");
+        //    }
+        //}
+
 
         public bool ValidarCRM(string crm)
         {

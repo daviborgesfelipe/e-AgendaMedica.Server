@@ -31,5 +31,48 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloMedico
 
             return ProcessarResultado(resultadoPost.ToResult(), contatoMap);
         }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(ListarMedicoViewModel), 200)]
+        [ProducesResponseType(typeof(string[]), 404)]
+        [ProducesResponseType(typeof(string[]), 500)]
+        public async Task<IActionResult> GetAll()
+        {
+            var resultadoGetAll = await servicoMedico.SelecionarTodosAsync();
+
+            if (resultadoGetAll.IsFailed)
+                return NotFound(resultadoGetAll.Errors);
+
+            return Ok(mapeador.Map<List<ListarMedicoViewModel>>(resultadoGetAll.Value));
+        }
+
+        [HttpGet("visualizacao-completa/{id}")]
+        [ProducesResponseType(typeof(VisualizarMedicoViewModel), 200)]
+        [ProducesResponseType(typeof(string[]), 404)]
+        [ProducesResponseType(typeof(string[]), 500)]
+        public async Task<IActionResult> GetCompleteById(Guid id)
+        {
+            var resultadoGet = await servicoMedico.SelecionarPorIdAsync(id);
+
+            if (resultadoGet.IsFailed)
+                return NotFound(resultadoGet.Errors);
+
+            return Ok(mapeador.Map<VisualizarMedicoViewModel>(resultadoGet.Value));
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(ListarMedicoViewModel), 200)]
+        [ProducesResponseType(typeof(string[]), 404)]
+        [ProducesResponseType(typeof(string[]), 500)]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var resultadoGet = await servicoMedico.SelecionarPorIdAsync(id);
+
+            if (resultadoGet.IsFailed)
+                return NotFound(resultadoGet.Errors);
+
+            return Ok(mapeador.Map<ListarMedicoViewModel>(resultadoGet.Value));
+        }
+
     }
 }

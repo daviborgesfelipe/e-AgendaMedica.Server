@@ -2,6 +2,7 @@
 using e_AgendaMedica.Aplicacao.Compartilhado;
 using e_AgendaMedica.Dominio.ModuloMedico;
 using FluentResults;
+using Serilog;
 
 namespace e_AgendaMedica.Aplicacao.ModuloMedico
 {
@@ -29,6 +30,27 @@ namespace e_AgendaMedica.Aplicacao.ModuloMedico
             await contextoPersistencia.GravarDadosAsync();
 
             return Result.Ok(medico);
+        }
+
+        public async Task<Result<Medico>> SelecionarPorIdAsync(Guid id)
+        {
+            var contato = await repositorioMedico.SelecionarPorIdAsync(id);
+
+            if (contato == null)
+            {
+                Log.Logger.Warning("Medico {MedicoId} não encontrado", id);
+
+                return Result.Fail("Medico não encontrado");
+            }
+
+            return Result.Ok(contato);
+        }
+
+        public async Task<Result<List<Medico>>> SelecionarTodosAsync()
+        {
+            var contatos = await repositorioMedico.SelecionarTodosAsync();
+
+            return Result.Ok(contatos);
         }
     }
 }
