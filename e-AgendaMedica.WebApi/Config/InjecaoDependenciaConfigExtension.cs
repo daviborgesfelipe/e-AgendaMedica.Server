@@ -1,9 +1,11 @@
 ﻿using e_Agenda.Dominio.Compartilhado;
+using e_AgendaMedica.Aplicacao.ModuloAtividade;
 using e_AgendaMedica.Aplicacao.ModuloMedico;
+using e_AgendaMedica.Dominio.ModuloAtividade;
 using e_AgendaMedica.Dominio.ModuloMedico;
 using e_AgendaMedica.Infra.Orm.Compartilhado;
+using e_AgendaMedica.Infra.Orm.ModuloAtividade;
 using e_AgendaMedica.Infra.Orm.ModuloMedico;
-using Microsoft.EntityFrameworkCore;
 
 namespace e_AgendaMedica.WebApi.Config
 {
@@ -21,6 +23,12 @@ namespace e_AgendaMedica.WebApi.Config
             services.AddTransient<IRepositorioMedico, RepositorioMedicoOrm>();
             services.AddTransient<IValidadorMedico, ValidadorMedico>();
             services.AddTransient<ServicoMedico>();
+
+            services.AddTransient<IRepositorioAtividade, RepositorioAtividadeOrm>();
+            services.AddTransient<IValidadorAtividade, ValidadorAtividade>();
+            services.AddTransient<ServicoAtividade>();
+
+            services.AddTransient<InserirAtividadesMappingAction>();
         }
     }
 }

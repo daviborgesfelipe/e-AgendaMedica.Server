@@ -1,10 +1,15 @@
 ﻿using e_AgendaMedica.Dominio.Compartilhado;
 using e_AgendaMedica.Dominio.ModuloMedico;
+using System.Text.Json.Serialization;
 
 namespace e_AgendaMedica.Dominio.ModuloAtividade
 {
     public class Atividade : EntidadeBase<Atividade>
     {
+        public Atividade()
+        {
+                
+        }
         public string Paciente { get; set; }
         public DateTime Data { get; set; }
         public TimeSpan HorarioTermino { get; set; }

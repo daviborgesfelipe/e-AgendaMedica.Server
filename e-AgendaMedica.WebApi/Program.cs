@@ -1,5 +1,6 @@
 using FluentValidation;
 using System.Globalization;
+using System.Text.Json.Serialization;
 
 namespace e_AgendaMedica.WebApi
 {
@@ -16,14 +17,22 @@ namespace e_AgendaMedica.WebApi
                 config.SuppressModelStateInvalidFilter = true;
             });
 
+            builder.Services.ConfigurarLogger(builder.Logging);
+
             builder.Services.ConfigurarAutoMapper();
 
             builder.Services.ConfigurarInjecaoDependencia(builder.Configuration);
 
             builder.Services.ConfigurarSwagger();
 
-            builder.Services.AddControllers();
-            
+            builder.Services.ConfigurarControllers();
+
+            //builder.Services.AddControllers()
+            //    .AddJsonOptions(options =>
+            //    {
+            //        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+            //    });
+
             builder.Services.AddEndpointsApiExplorer();
            
             var app = builder.Build();

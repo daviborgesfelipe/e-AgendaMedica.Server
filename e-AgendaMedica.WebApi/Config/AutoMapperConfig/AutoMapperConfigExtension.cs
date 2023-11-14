@@ -7,6 +7,7 @@
             services.AddAutoMapper(opt =>
             {
                 opt.AddProfile<MedicoProfile>();
+                opt.AddProfile<AtividadeProfile>();
             });
         }
     }

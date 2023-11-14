@@ -6,10 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
-  <ItemGroup>
-  	<Folder Include="ModuloAtividade\" />
-  </ItemGroup>
 	
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.8.0" />

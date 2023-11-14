@@ -20,11 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-	<Folder Include="Controllers\ModuloAtividade\" />
-    <Folder Include="Filters\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\e-AgendaMedica.Aplicacao\e-AgendaMedica.Aplicacao.csproj" />
     <ProjectReference Include="..\e-AgendaMedica.Dominio\e-AgendaMedica.Dominio.csproj" />
     <ProjectReference Include="..\e-AgendaMedica.Infra.Orm\e-AgendaMedica.Infra.Orm.csproj" />

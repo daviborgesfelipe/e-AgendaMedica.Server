@@ -1,6 +1,6 @@
 ﻿using e_AgendaMedica.Dominio.Compartilhado;
 using e_AgendaMedica.Dominio.ModuloAtividade;
-using System.Text.RegularExpressions;
+using System.Text.Json.Serialization;
 
 namespace e_AgendaMedica.Dominio.ModuloMedico
 {
@@ -20,6 +20,8 @@ namespace e_AgendaMedica.Dominio.ModuloMedico
         public string Nome { get; set; }
         public string Especialidade { get; set; }
         public string CRM { get; set; }
-        List<Atividade> ListaAtividades { get; set; }
+
+        [JsonIgnore]
+        public List<Atividade> ListaAtividades { get; set; }
     }
 }
