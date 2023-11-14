@@ -13,6 +13,7 @@ namespace e_AgendaMedica.WebApi.Config
                 .AddJsonOptions(opt =>
                 {
                     opt.JsonSerializerOptions.Converters.Add(new TimeSpanToStringConverter());
+                    opt.JsonSerializerOptions.Converters.Add(new DateTimeToStringConverter());
                 });
             ;
         }

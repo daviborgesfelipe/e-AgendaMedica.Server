@@ -15,6 +15,12 @@ namespace e_AgendaMedica.WebApi.Config
                     Type = "string",
                     Example = new OpenApiString("00:00:00")
                 });
+
+                c.MapType<DateTime>(() => new OpenApiSchema
+                {
+                    Type = "string",
+                    Example = new OpenApiString(DateTime.Now.ToString("dd/MM/yyyy"))
+                });
             });
         }
     }
