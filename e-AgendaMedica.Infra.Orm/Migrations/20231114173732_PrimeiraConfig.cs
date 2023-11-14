@@ -18,8 +18,7 @@ namespace e_AgendaMedica.Infra.Orm.Migrations
                     Data = table.Column<DateTime>(type: "datetime2", nullable: false),
                     HorarioTermino = table.Column<TimeSpan>(type: "time", nullable: false),
                     HorarioInicio = table.Column<TimeSpan>(type: "time", nullable: false),
-                    TipoAtividade = table.Column<int>(type: "int", nullable: false),
-                    MedicoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    TipoAtividade = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -33,8 +32,7 @@ namespace e_AgendaMedica.Infra.Orm.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Nome = table.Column<string>(type: "varchar(200)", nullable: false),
                     Especialidade = table.Column<string>(type: "varchar(200)", nullable: true),
-                    CRM = table.Column<string>(type: "varchar(20)", nullable: true),
-                    AtividadeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    CRM = table.Column<string>(type: "varchar(20)", nullable: true)
                 },
                 constraints: table =>
                 {

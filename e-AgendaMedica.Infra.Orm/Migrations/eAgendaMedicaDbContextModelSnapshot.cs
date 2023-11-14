@@ -51,9 +51,6 @@ namespace e_AgendaMedica.Infra.Orm.Migrations
                     b.Property<TimeSpan>("HorarioTermino")
                         .HasColumnType("time");
 
-                    b.Property<Guid>("MedicoId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Paciente")
                         .IsRequired()
                         .HasColumnType("varchar(200)");
@@ -69,9 +66,6 @@ namespace e_AgendaMedica.Infra.Orm.Migrations
             modelBuilder.Entity("e_AgendaMedica.Dominio.ModuloMedico.Medico", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AtividadeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CRM")

@@ -1,5 +1,6 @@
 ﻿using e_AgendaMedica.Dominio.ModuloAtividade;
 using e_AgendaMedica.WebApi.ViewModels.ModuloAtividade;
+using Microsoft.OpenApi.Extensions;
 
 namespace e_AgendaMedica.WebApi.Config.AutoMapperConfig
 {
@@ -16,7 +17,14 @@ namespace e_AgendaMedica.WebApi.Config.AutoMapperConfig
             CreateMap<Atividade, ListarAtividadesViewModel>()
                  .ForMember(destino => destino.Data, opt => opt.MapFrom(origem => origem.Data.ToShortDateString()))
                  .ForMember(destino => destino.HorarioInicio, opt => opt.MapFrom(origem => origem.HorarioInicio.ToString(@"hh\:mm")))
-                 .ForMember(destino => destino.HorarioTermino, opt => opt.MapFrom(origem => origem.HorarioTermino.ToString(@"hh\:mm")));
+                 .ForMember(destino => destino.HorarioTermino, opt => opt.MapFrom(origem => origem.HorarioTermino.ToString(@"hh\:mm")))
+                 .ForMember(destino => destino.TipoAtividade, opt => opt.MapFrom(origem => origem.TipoAtividade.GetDisplayName()));
+
+            CreateMap<Atividade, VisualizarAtividadeViewModel>()
+                 .ForMember(destino => destino.Data, opt => opt.MapFrom(origem => origem.Data.ToShortDateString()))
+                 .ForMember(destino => destino.HorarioInicio, opt => opt.MapFrom(origem => origem.HorarioInicio.ToString(@"hh\:mm")))
+                 .ForMember(destino => destino.HorarioTermino, opt => opt.MapFrom(origem => origem.HorarioTermino.ToString(@"hh\:mm")))
+                 .ForMember(destino => destino.TipoAtividade, opt => opt.MapFrom(origem => origem.TipoAtividade.GetDisplayName()));
         }
     }
 }
