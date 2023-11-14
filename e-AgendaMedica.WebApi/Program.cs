@@ -1,4 +1,6 @@
 using FluentValidation;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Models;
 using System.Globalization;
 using System.Text.Json.Serialization;
 
@@ -27,17 +29,10 @@ namespace e_AgendaMedica.WebApi
 
             builder.Services.ConfigurarControllers();
 
-            //builder.Services.AddControllers()
-            //    .AddJsonOptions(options =>
-            //    {
-            //        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-            //    });
-
             builder.Services.AddEndpointsApiExplorer();
            
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
