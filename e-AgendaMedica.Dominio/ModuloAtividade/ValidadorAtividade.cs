@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using e_AgendaMedica.Dominio.Compartilhado;
+using FluentValidation;
 
 namespace e_AgendaMedica.Dominio.ModuloAtividade
 {
@@ -19,6 +20,16 @@ namespace e_AgendaMedica.Dominio.ModuloAtividade
 
             RuleFor(x => x.HorarioInicio)
                 .NotNull().NotEmpty();
+
+            //RuleFor(x => x.TipoAtividade)
+            //    .Equal(TipoAtividadeEnum.Cirurgia)
+            //    .When(x => x.ListaMedicos != null && x.ListaMedicos.Count != 1)
+            //    .WithMessage("Para atividades do tipo cirurgia, a lista de médicos deve conter exatamente um médico.");
+
+            //RuleFor(x => x.TipoAtividade)
+            //    .Equal(TipoAtividadeEnum.Consulta)
+            //    .When(x => x.ListaMedicos == null || !x.ListaMedicos.Any())
+            //    .WithMessage("Para atividades do tipo consulta, a lista de médicos não pode estar vazia.");
 
             //VALIDAR
             RuleFor(x => x.TipoAtividade);

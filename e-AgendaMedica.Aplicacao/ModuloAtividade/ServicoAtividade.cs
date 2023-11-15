@@ -1,8 +1,6 @@
 ﻿using e_Agenda.Dominio.Compartilhado;
 using e_AgendaMedica.Aplicacao.Compartilhado;
-using e_AgendaMedica.Aplicacao.ModuloMedico;
 using e_AgendaMedica.Dominio.ModuloAtividade;
-using e_AgendaMedica.Dominio.ModuloMedico;
 using FluentResults;
 using Serilog;
 
@@ -12,15 +10,12 @@ namespace e_AgendaMedica.Aplicacao.ModuloAtividade
     {
         private IRepositorioAtividade repositorioAtividade;
         private IContextoPersistencia contextoPersistencia;
-        private IServicoMedico servicoMedico;
 
         public ServicoAtividade(IRepositorioAtividade repositorioAtividade,
-                                IContextoPersistencia contextoPersistencia,
-                                IServicoMedico servicoMedico)
+                                IContextoPersistencia contextoPersistencia)
         {
             this.repositorioAtividade = repositorioAtividade;
             this.contextoPersistencia = contextoPersistencia;
-            this.servicoMedico = servicoMedico;
         }
 
         public async Task<Result<Atividade>> InserirAsync(Atividade atividade)
