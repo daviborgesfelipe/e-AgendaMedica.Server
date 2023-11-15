@@ -29,6 +29,7 @@ namespace e_AgendaMedica.WebApi.Config
             services.AddTransient<IServicoAtividade, ServicoAtividade>();
 
             services.AddTransient<InserirAtividadesMappingAction>();
+            services.AddTransient<EditarAtividadesMappingAction>();
         }
     }
 }

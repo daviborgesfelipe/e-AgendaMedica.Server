@@ -19,7 +19,7 @@ namespace e_AgendaMedica.Infra.Orm.ModuloAtividade
 
             builder.HasMany(a => a.ListaMedicos)
                 .WithMany(m => m.ListaAtividades)
-                .UsingEntity(j => j.ToTable("TBAtividadeMedico"));
+                .UsingEntity(j => j.ToTable("TBAtividade_TBMedico"));
 
         }
     }

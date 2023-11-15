@@ -12,7 +12,7 @@ using e_AgendaMedica.Infra.Orm.Compartilhado;
 namespace e_AgendaMedica.Infra.Orm.Migrations
 {
     [DbContext(typeof(eAgendaMedicaDbContext))]
-    [Migration("20231114173732_PrimeiraConfig")]
+    [Migration("20231115162517_PrimeiraConfig")]
     partial class PrimeiraConfig
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,7 +36,7 @@ namespace e_AgendaMedica.Infra.Orm.Migrations
 
                     b.HasIndex("ListaMedicosId");
 
-                    b.ToTable("TBAtividadeMedico", (string)null);
+                    b.ToTable("TBAtividade_TBMedico", (string)null);
                 });
 
             modelBuilder.Entity("e_AgendaMedica.Dominio.ModuloAtividade.Atividade", b =>
