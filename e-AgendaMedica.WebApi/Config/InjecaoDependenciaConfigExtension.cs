@@ -22,13 +22,14 @@ namespace e_AgendaMedica.WebApi.Config
 
             services.AddTransient<IRepositorioMedico, RepositorioMedicoOrm>();
             services.AddTransient<IValidadorMedico, ValidadorMedico>();
-            services.AddTransient<ServicoMedico>();
+            services.AddTransient<IServicoMedico, ServicoMedico>();
 
             services.AddTransient<IRepositorioAtividade, RepositorioAtividadeOrm>();
             services.AddTransient<IValidadorAtividade, ValidadorAtividade>();
-            services.AddTransient<ServicoAtividade>();
+            services.AddTransient<IServicoAtividade, ServicoAtividade>();
 
             services.AddTransient<InserirAtividadesMappingAction>();
+            services.AddTransient<EditarAtividadesMappingAction>();
         }
     }
 }

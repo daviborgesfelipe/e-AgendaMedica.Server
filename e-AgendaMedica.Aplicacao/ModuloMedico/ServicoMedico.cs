@@ -1,21 +1,25 @@
 ﻿using e_Agenda.Dominio.Compartilhado;
 using e_AgendaMedica.Aplicacao.Compartilhado;
+using e_AgendaMedica.Dominio.ModuloAtividade;
 using e_AgendaMedica.Dominio.ModuloMedico;
 using FluentResults;
 using Serilog;
 
 namespace e_AgendaMedica.Aplicacao.ModuloMedico
 {
-    public class ServicoMedico : ServicoBase<Medico, ValidadorMedico>
+    public class ServicoMedico : ServicoBase<Medico, ValidadorMedico>, IServicoMedico
     {
         private IRepositorioMedico repositorioMedico;
         private IContextoPersistencia contextoPersistencia;
+        private IRepositorioAtividade repositorioAtividade;
 
-        public ServicoMedico(IRepositorioMedico repositorioMedico, 
-                             IContextoPersistencia contextoPersistencia)
+        public ServicoMedico(IRepositorioMedico repositorioMedico,
+                             IContextoPersistencia contextoPersistencia,
+                             IRepositorioAtividade repositorioAtividade)
         {
             this.repositorioMedico = repositorioMedico;
             this.contextoPersistencia = contextoPersistencia;
+            this.repositorioAtividade = repositorioAtividade;
         }
 
         public async Task<Result<Medico>> InserirAsync(Medico medico)
@@ -49,9 +53,9 @@ namespace e_AgendaMedica.Aplicacao.ModuloMedico
             return Result.Ok(medico);
         }
 
-        private async Task<Result<Medico>> EditarAsync(Medico medico)
+        public async Task<Result<Medico>> EditarAsync(Medico medico)
         {
-            repositorioMedico.EditarAsync(medico);
+            await repositorioMedico.EditarAsync(medico);
 
             await contextoPersistencia.GravarDadosAsync();
 
@@ -96,6 +100,24 @@ namespace e_AgendaMedica.Aplicacao.ModuloMedico
             var contatos = await repositorioMedico.SelecionarTodosAsync();
 
             return Result.Ok(contatos);
+        }
+
+        public async Task<Result<Medico>> ExcluirAsync(Medico medico)
+        {
+            // Verifica se o médico está associado a alguma atividade do tipo cirurgia
+            var atividadesCirurgicas = await repositorioAtividade.SelecionarAtividadesCirurgicasComMedicoAsync(medico.Id);
+
+            if (atividadesCirurgicas.Any())
+            {
+                // Se o médico estiver associado a alguma atividade do tipo cirurgia, impede a exclusão
+                return Result.Fail<Medico>("Não é possível excluir um médico que está associado a uma atividade do tipo cirurgia.");
+            }
+
+            await repositorioMedico.ExcluirAsync(medico);
+
+            await contextoPersistencia.GravarDadosAsync();
+
+            return Result.Ok();
         }
     }
 }

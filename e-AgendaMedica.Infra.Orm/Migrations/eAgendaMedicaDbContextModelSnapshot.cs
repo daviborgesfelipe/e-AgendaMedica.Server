@@ -34,7 +34,7 @@ namespace e_AgendaMedica.Infra.Orm.Migrations
 
                     b.HasIndex("ListaMedicosId");
 
-                    b.ToTable("TBAtividadeMedico", (string)null);
+                    b.ToTable("TBAtividade_TBMedico", (string)null);
                 });
 
             modelBuilder.Entity("e_AgendaMedica.Dominio.ModuloAtividade.Atividade", b =>

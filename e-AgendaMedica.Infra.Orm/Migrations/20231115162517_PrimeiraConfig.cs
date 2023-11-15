@@ -40,7 +40,7 @@ namespace e_AgendaMedica.Infra.Orm.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TBAtividadeMedico",
+                name: "TBAtividade_TBMedico",
                 columns: table => new
                 {
                     ListaAtividadesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -48,15 +48,15 @@ namespace e_AgendaMedica.Infra.Orm.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TBAtividadeMedico", x => new { x.ListaAtividadesId, x.ListaMedicosId });
+                    table.PrimaryKey("PK_TBAtividade_TBMedico", x => new { x.ListaAtividadesId, x.ListaMedicosId });
                     table.ForeignKey(
-                        name: "FK_TBAtividadeMedico_TBAtividade_ListaAtividadesId",
+                        name: "FK_TBAtividade_TBMedico_TBAtividade_ListaAtividadesId",
                         column: x => x.ListaAtividadesId,
                         principalTable: "TBAtividade",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TBAtividadeMedico_TBMedico_ListaMedicosId",
+                        name: "FK_TBAtividade_TBMedico_TBMedico_ListaMedicosId",
                         column: x => x.ListaMedicosId,
                         principalTable: "TBMedico",
                         principalColumn: "Id",
@@ -64,15 +64,15 @@ namespace e_AgendaMedica.Infra.Orm.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_TBAtividadeMedico_ListaMedicosId",
-                table: "TBAtividadeMedico",
+                name: "IX_TBAtividade_TBMedico_ListaMedicosId",
+                table: "TBAtividade_TBMedico",
                 column: "ListaMedicosId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "TBAtividadeMedico");
+                name: "TBAtividade_TBMedico");
 
             migrationBuilder.DropTable(
                 name: "TBAtividade");

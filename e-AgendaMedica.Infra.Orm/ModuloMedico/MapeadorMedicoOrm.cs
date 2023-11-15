@@ -15,9 +15,7 @@ namespace e_AgendaMedica.Infra.Orm.ModuloMedico
             builder.Property(x => x.Especialidade).HasColumnType("varchar(200)").IsRequired(required: false);
             builder.Property(x => x.CRM).HasColumnType("varchar(20)").IsRequired(required: false);
 
-            builder.HasMany(m => m.ListaAtividades)
-                .WithMany(a => a.ListaMedicos)
-                .UsingEntity(j => j.ToTable("TBAtividadeMedico"));
+            builder.HasMany(x => x.ListaAtividades);
         }
     }
 }

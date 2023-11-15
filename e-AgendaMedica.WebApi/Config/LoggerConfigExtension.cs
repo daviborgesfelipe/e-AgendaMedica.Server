@@ -7,7 +7,7 @@ namespace e_AgendaMedica.WebApi.Config
         public static void ConfigurarLogger(this IServiceCollection services, ILoggingBuilder logging)
         {
             Log.Logger = new LoggerConfiguration()
-              .MinimumLevel.Information()
+              .MinimumLevel.Warning()
               .Enrich.FromLogContext()
               .WriteTo.Console()
               .CreateLogger();

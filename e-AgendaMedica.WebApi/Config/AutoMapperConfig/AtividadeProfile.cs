@@ -13,6 +13,9 @@ namespace e_AgendaMedica.WebApi.Config.AutoMapperConfig
                 .ForMember(destino => destino.ListaMedicos, opt => opt.Ignore())
                 .AfterMap<InserirAtividadesMappingAction>();
 
+            CreateMap<EditarAtividadeViewModel, Atividade>()
+                .ForMember(destino => destino.ListaMedicos, opt => opt.Ignore())
+                .AfterMap<EditarAtividadesMappingAction>().ReverseMap();
 
             CreateMap<Atividade, ListarAtividadesViewModel>()
                  .ForMember(destino => destino.Data, opt => opt.MapFrom(origem => origem.Data.ToShortDateString()))

@@ -10,10 +10,10 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloMedico
     public class MedicoController : ApiControllerBase
     {
         private IMapper mapeador;
-        private ServicoMedico servicoMedico;
+        private IServicoMedico servicoMedico;
 
 
-        public MedicoController(IMapper mapeador, ServicoMedico servicoMedico)
+        public MedicoController(IMapper mapeador, IServicoMedico servicoMedico)
         {
             this.mapeador = mapeador;
             this.servicoMedico = servicoMedico;
@@ -91,7 +91,7 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloMedico
 
             var medico = mapeador.Map(medicoViewModel, resultadoGet.Value);
 
-            var resultadoPut = await servicoMedico.Editar(medico);
+            var resultadoPut = await servicoMedico.EditarAsync(medico);
 
             return ProcessarResultado(resultadoPut.ToResult(), medicoViewModel);
         }
@@ -108,9 +108,9 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloMedico
             if (resultadoSelecao.IsFailed)
                 return NotFound(resultadoSelecao.Errors);
 
-            var resultadoDelete = await servicoMedico.Excluir(resultadoSelecao.Value);
+            var resultadoDelete = await servicoMedico.ExcluirAsync(resultadoSelecao.Value);
 
-            return ProcessarResultado(resultadoDelete);
+            return ProcessarResultado(resultadoDelete.ToResult());
         }
     }
 }
