@@ -11,8 +11,8 @@ namespace e_AgendaMedica.Infra.Orm.ModuloMedico
             builder.ToTable("TBMedico");
 
             builder.Property(x => x.Id).ValueGeneratedNever();
-            builder.Property(x => x.Nome).HasColumnType("varchar(200)").IsRequired();
-            builder.Property(x => x.Especialidade).HasColumnType("varchar(200)").IsRequired(required: false);
+            builder.Property(x => x.Nome).HasColumnType("varchar(150)").IsRequired();
+            builder.Property(x => x.Especialidade).HasColumnType("varchar(150)").IsRequired(required: false);
             builder.Property(x => x.CRM).HasColumnType("varchar(20)").IsRequired(required: false);
 
             builder.HasMany(x => x.ListaAtividades);

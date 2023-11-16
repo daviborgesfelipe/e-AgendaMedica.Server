@@ -1,3 +1,5 @@
+using e_Agenda.Dominio.Compartilhado;
+using e_AgendaMedica.Infra.MassaDados;
 using FluentValidation;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
@@ -30,14 +32,18 @@ namespace e_AgendaMedica.WebApi
             builder.Services.ConfigurarControllers();
 
             builder.Services.AddEndpointsApiExplorer();
-           
+
             var app = builder.Build();
+
 
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+   
+            // Verificar se o banco de dados existe
+            app.UseMassaDados();
 
             app.UseHttpsRedirection();
 
