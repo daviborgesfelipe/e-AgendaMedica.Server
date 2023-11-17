@@ -1,11 +1,12 @@
-﻿using e_AgendaMedica.Aplicacao.Compartilhado;
+﻿using AutoMapper;
+using e_AgendaMedica.Aplicacao.Compartilhado;
 using e_AgendaMedica.Dominio.Compartilhado.Interfaces;
 using e_AgendaMedica.Dominio.ModuloAtividade;
 using e_AgendaMedica.Dominio.ModuloAtividade.Interfaces;
 using e_AgendaMedica.Dominio.ModuloMedico.Interfaces;
-using e_AgendaMedica.Dominio.ModuloMedico;
 using FluentResults;
 using Serilog;
+
 
 namespace e_AgendaMedica.Aplicacao.ModuloAtividade
 {
@@ -14,14 +15,17 @@ namespace e_AgendaMedica.Aplicacao.ModuloAtividade
         private IRepositorioAtividade repositorioAtividade;
         private IContextoPersistencia contextoPersistencia;
         private IRepositorioMedico repositorioMedico;
+        private IMapper mapeador;
 
         public ServicoAtividade(IRepositorioAtividade repositorioAtividade,
                                 IContextoPersistencia contextoPersistencia,
-                                IRepositorioMedico repositorioMedico)
+                                IRepositorioMedico repositorioMedico,
+                                IMapper mapeador)
         {
             this.repositorioAtividade = repositorioAtividade;
             this.contextoPersistencia = contextoPersistencia;
             this.repositorioMedico = repositorioMedico;
+            this.mapeador = mapeador;
         }
 
         public async Task<Result<Atividade>> InserirAsync(Atividade atividade)
@@ -31,18 +35,23 @@ namespace e_AgendaMedica.Aplicacao.ModuloAtividade
             if (resultado.IsFailed)
                 return Result.Fail(resultado.Errors);
 
-            if (ConferirAtividadeCirurgica(atividade))
-            {
-                if (atividade.ListaMedicos.Count > 1)
-                    Log.Logger.Warning("Atividades do tipo cirurgia. A lista de médicos deve conter no máximo um médico. Atividade de Id:{AtividadeId} contém uma lista de médicos com o total de: {ListaMedicosCount}", atividade.Id, atividade.ListaMedicos.Count);
-
-
-                return Result.Fail<Atividade>("Para atividades do tipo cirurgia, a lista de médicos deve conter no máximo um médico.");
-            }
-
             if (await ConflitoComOutrasAtividades(atividade))
             {
                 return Result.Fail("Conflito de horários com outras atividades.");
+            }
+
+            if (!await VerificarTempoRecuperacaoNecessario(atividade))
+            {
+                Log.Logger.Warning("Tempo de recuperação insuficiente para atividade de cirurgia do médico. Atividade de Id:{AtividadeId}", atividade.Id);
+                return Result.Fail<Atividade>("Tempo de recuperação insuficiente para atividade de cirurgia do médico.");
+            }
+
+            if (ConferirAtividadeCirurgica(atividade) && atividade.ListaMedicos.Count > 1)
+            {
+                Log.Logger.Warning("Atividades do tipo cirurgia. A lista de médicos deve conter no máximo um médico. Atividade de Id:{AtividadeId} contém uma lista de médicos com o total de: {ListaMedicosCount}", atividade.Id, atividade.ListaMedicos.Count);
+
+
+                return Result.Fail<Atividade>("Para atividades do tipo cirurgia, a lista de médicos deve conter no máximo um médico.");
             }
 
             await repositorioAtividade.InserirAsync(atividade);
@@ -82,23 +91,27 @@ namespace e_AgendaMedica.Aplicacao.ModuloAtividade
 
             var atividadeExistente = await ObterPorIdAsync(atividade.Id);
 
-            if (ConferirAtividadeCirurgica(atividade))
-            {
-                if (ComparaMedicoJaEstaNaLista(atividade, atividadeExistente))
-                {
-                    if (atividade.ListaMedicos.Count > 1)
-                        Log.Logger.Warning("Atividades do tipo cirurgia. A lista de médicos deve conter no máximo um médico. Atividade de Id:{AtividadeId} contém uma lista de médicos com o total de: {ListaMedicosCount}", atividade.Id, atividade.ListaMedicos.Count);
-
-
-                    return Result.Fail<Atividade>("Para atividades do tipo cirurgia, a lista de médicos deve conter no máximo um médico.");
-                }
-            }
-
             if (await ConflitoComOutrasAtividades(atividade))
             {
-                Log.Logger.Warning("Atividade de Id:{AtividadeId} contém conflito de horários com outras atividades", atividade.Id );
+                Log.Logger.Warning("Atividade de Id:{AtividadeId} contém conflito de horários com outras atividades", atividade.Id);
 
                 return Result.Fail("Conflito de horários com outras atividades.");
+            }
+
+            if (!await VerificarTempoRecuperacaoNecessario(atividade))
+            {
+                Log.Logger.Warning("Tempo de recuperação insuficiente para atividade de cirurgia do médico. Atividade de Id:{AtividadeId}", atividade.Id);
+                return Result.Fail<Atividade>("Tempo de recuperação insuficiente para atividade de cirurgia do médico.");
+            }
+
+            if (ConferirAtividadeCirurgica(atividade))
+            {
+                if (TemMaisDeUmMedicoDiferente(atividade, atividadeExistente))
+                {
+                    Log.Logger.Warning("Atividades do tipo cirurgia. A lista de médicos deve conter no máximo um médico. Atividade de Id:{AtividadeId} contém uma lista de médicos com o total de: {ListaMedicosCount}", atividade.Id, atividade.ListaMedicos.Count);
+                    
+                    return Result.Fail<Atividade>("Para atividades do tipo cirurgia, a lista de médicos deve conter no máximo um médico.");
+                }
             }
 
             await repositorioAtividade.EditarAsync(atividade);
@@ -117,41 +130,45 @@ namespace e_AgendaMedica.Aplicacao.ModuloAtividade
             return Result.Ok();
         }
 
-        public async Task<Result<List<Medico>>> ObterMedicosMaisHorasTrabalhadas(DateTime dataInicio, DateTime dataFim)
+        public async Task<Result<List<MedicoComHorasVM>>> ObterMedicosMaisHorasTrabalhadas(DateTime dataInicio, DateTime dataFim)
         {
-            // Lógica para calcular horas trabalhadas por médico dentro do período
-            var atividadesNoPeriodo = await repositorioAtividade.ObterAtividadesNoPeriodoAsync(dataInicio, dataFim);
+            var listaAtividadesNoPeriodo = await repositorioAtividade.ObterAtividadesNoPeriodoAsync(dataInicio, dataFim);
 
-            var horasPorMedico = new Dictionary<Guid, TimeSpan>();
+            var horasTrabalhadasPorMedico = new Dictionary<Guid, TimeSpan>();
 
-            foreach (var atividade in atividadesNoPeriodo)
+            foreach (var atividade in listaAtividadesNoPeriodo)
             {
-                var teste = ObterPorIdAsync(atividade.Id);
-                foreach (var medico in teste.Result.Value.ListaMedicos)
+                var atividadeComMedico = await ObterPorIdAsync(atividade.Id);
+                foreach (var medico in atividadeComMedico.Value.ListaMedicos)
                 {
-                    if (!horasPorMedico.ContainsKey(medico.Id))
+                    if (!horasTrabalhadasPorMedico.ContainsKey(medico.Id))
                     {
-                        horasPorMedico[medico.Id] = TimeSpan.Zero;
+                        horasTrabalhadasPorMedico[medico.Id] = TimeSpan.Zero;
                     }
 
-                    horasPorMedico[medico.Id] += atividade.HorarioTermino - atividade.HorarioInicio;
+                    horasTrabalhadasPorMedico[medico.Id] += atividade.HorarioTermino - atividade.HorarioInicio;
                 }
             }
 
-            // Ordenar os médicos com base nas horas trabalhadas e selecionar os 10 principais
-            var top10Medicos = 
-                horasPorMedico.OrderByDescending(pair => pair.Value)
-                    .Take(10).Select(pair => pair.Key).ToList();
+            var listaIdsMedicosMaisHorasTrabalhadas = 
+                    horasTrabalhadasPorMedico.OrderByDescending(medicoHoras => medicoHoras.Value)
+                                  .Take(10)
+                                  .Select(medicoHoras => medicoHoras.Key)
+                                  .ToList();
 
-            var medicos = await repositorioMedico.ObterMuitos(top10Medicos);
+            var listaMedicos = await repositorioMedico.ObterMuitos(listaIdsMedicosMaisHorasTrabalhadas);
+            
+            var listaMedicosFinal = mapeador.Map<List<MedicoComHorasVM>>(listaMedicos.ToResult().Value);
+            
+            foreach (var medico in listaMedicosFinal)
+                medico.TotalHorasTrabalhadas += horasTrabalhadasPorMedico.GetValueOrDefault(medico.Id, TimeSpan.Zero);
 
-            return Result.Ok(medicos);
+            return Result.Ok(listaMedicosFinal);
         }
 
+        #region Verifica Conflitos
 
-        #region Conferir Conflito
-
-        private bool ComparaMedicoJaEstaNaLista(Atividade atividade, Result<Atividade> atividadeExistente)
+        private bool TemMaisDeUmMedicoDiferente(Atividade atividade, Result<Atividade> atividadeExistente)
         {
             return atividade.ListaMedicos.Any(medico => atividadeExistente.Value.ListaMedicos.Any(medicoExistente => medicoExistente.Id != medico.Id));
         }
@@ -167,7 +184,30 @@ namespace e_AgendaMedica.Aplicacao.ModuloAtividade
         {
             return atividade.TipoAtividade == TipoAtividadeEnum.Cirurgia;
         }
+
+        private async Task<bool> VerificarTempoRecuperacaoNecessario(Atividade atividade)
+        {
+            foreach (var medico in atividade.ListaMedicos)
+            {
+                var tempoRecuperacaoNecessario = atividade.TipoAtividade == TipoAtividadeEnum.Cirurgia
+                    ? TimeSpan.FromHours(4)
+                    : TimeSpan.FromMinutes(20);
+
+                var ultimaAtividadeConcluida = await repositorioAtividade.ObterUltimaAtividadeConcluidaDoMedicoAsync(medico.Id);
+
+                if (ultimaAtividadeConcluida != null &&
+                    atividade.Data <= (ultimaAtividadeConcluida.Data += ultimaAtividadeConcluida.HorarioTermino.Add(tempoRecuperacaoNecessario)))
+                {
+                    Log.Logger.Warning("Tempo de recuperação insuficiente para atividade do médico {MedicoId}. Atividade de Id:{AtividadeId}", medico.Id, atividade.Id);
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         #endregion
+
 
     }
 }

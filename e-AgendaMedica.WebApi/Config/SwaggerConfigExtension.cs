@@ -19,7 +19,7 @@ namespace e_AgendaMedica.WebApi.Config
                 c.MapType<DateTime>(() => new OpenApiSchema
                 {
                     Type = "string",
-                    Example = new OpenApiString(DateTime.Now.ToString("dd/MM/yyyy"))
+                    Example = new OpenApiString(DateTime.Now.ToString("yyyy-MM-dd"))
                 });
             });
         }

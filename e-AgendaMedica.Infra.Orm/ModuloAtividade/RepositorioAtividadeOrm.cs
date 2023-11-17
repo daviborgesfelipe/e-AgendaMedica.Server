@@ -18,22 +18,25 @@ namespace e_AgendaMedica.Infra.Orm.ModuloAtividade
                 .Include(x => x.ListaMedicos)
                 .SingleOrDefaultAsync(x => x.Id == id);
         }
-        public async Task<List<Atividade>> ObterAtividadesCirurgicasComMedicoAsync(Guid medicoId)
+
+        public async Task<List<Atividade>> ObterAtividadesNoPeriodoAsync(DateTime dataInicio, DateTime dataFim)
         {
-            return await registros
-                .Where(atividade => atividade.ListaMedicos.Any(medico => medico.Id == medicoId) && atividade.TipoAtividade == TipoAtividadeEnum.Cirurgia)
-                .ToListAsync();
+            return registros
+                .Where(atividade => atividade.Data >= dataInicio && atividade.Data <= dataFim)
+                .ToList();
         }
 
         #region Conferir Conflito 
 
-        #endregion
-
-        public async Task<List<Atividade>> ObterAtividadesNoPeriodoAsync(DateTime dataInicio, DateTime dataFim)
+        public async Task<Atividade> ObterUltimaAtividadeConcluidaDoMedicoAsync(Guid medicoId)
         {
-            return await registros
-                .Where(atividade => atividade.Data >= dataInicio && atividade.Data <= dataFim)
-                .ToListAsync();
+            var ultimaAtividade = await registros
+                .Include(a => a.ListaMedicos)
+                .Where(a => a.ListaMedicos.Any(m => m.Id == medicoId) && a.HorarioTermino < DateTime.Now.TimeOfDay)
+                .OrderByDescending(a => a.HorarioTermino)
+                .FirstOrDefaultAsync();
+
+            return ultimaAtividade;
         }
 
         public async Task<List<Atividade>> ObterAtividadesDoMedicoAsync(List<Medico> medicos)
@@ -44,5 +47,14 @@ namespace e_AgendaMedica.Infra.Orm.ModuloAtividade
                 .Where(atividade => atividade.ListaMedicos.Any(medico => idsMedicos.Contains(medico.Id)))
                 .ToListAsync();
         }
+
+        public async Task<List<Atividade>> ObterAtividadesCirurgicasComMedicoAsync(Guid medicoId)
+        {
+            return await registros
+                .Where(atividade => atividade.ListaMedicos.Any(medico => medico.Id == medicoId) && atividade.TipoAtividade == TipoAtividadeEnum.Cirurgia)
+                .ToListAsync();
+        }
+        #endregion
+
     }
 }

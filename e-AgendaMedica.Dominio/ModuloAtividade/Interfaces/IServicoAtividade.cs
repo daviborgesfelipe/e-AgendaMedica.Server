@@ -6,6 +6,6 @@ namespace e_AgendaMedica.Dominio.ModuloAtividade.Interfaces
 {
     public interface IServicoAtividade : IServico<Atividade>
     {
-        Task<Result<List<Medico>>> ObterMedicosMaisHorasTrabalhadas(DateTime dataInicio, DateTime dataFim);
+        Task<Result<List<MedicoComHorasVM>>> ObterMedicosMaisHorasTrabalhadas(DateTime dataInicio, DateTime dataFim);
     }
 }

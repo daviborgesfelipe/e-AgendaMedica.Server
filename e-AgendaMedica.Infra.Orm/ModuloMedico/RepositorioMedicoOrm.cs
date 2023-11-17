@@ -24,7 +24,5 @@ namespace e_AgendaMedica.Infra.Orm.ModuloMedico
                 .Include(x => x.ListaAtividades)
                 .SingleOrDefaultAsync(x => x.Id == id);
         }
-
-
     }
 }

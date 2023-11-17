@@ -10,6 +10,8 @@ namespace e_AgendaMedica.Dominio.ModuloAtividade.Interfaces
         Task<List<Atividade>> ObterAtividadesNoPeriodoAsync(DateTime dataInicio, DateTime dataFim);
 
         Task<List<Atividade>> ObterAtividadesDoMedicoAsync(List<Medico> medicos);
+
+        Task<Atividade> ObterUltimaAtividadeConcluidaDoMedicoAsync(Guid medicoId);
     }
 }
 

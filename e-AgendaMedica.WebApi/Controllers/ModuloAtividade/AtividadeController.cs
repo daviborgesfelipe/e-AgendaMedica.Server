@@ -95,6 +95,7 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloAtividade
 
             return ProcessarResultado(resultadoPut.ToResult(), atividadeViewModel);
         }
+
         [HttpDelete("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(typeof(string[]), 400)]
@@ -118,12 +119,12 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloAtividade
         [ProducesResponseType(typeof(string[]), 500)]
         public async Task<IActionResult> ObterMedicosMaisHorasTrabalhadas( DateTime dataInicio, DateTime dataTermino)//route constraint
         {
-            var resultadoTop10Medicos = await servicoAtividade.ObterMedicosMaisHorasTrabalhadas(dataInicio, dataTermino);
+            var resultadoGet = await servicoAtividade.ObterMedicosMaisHorasTrabalhadas(dataInicio, dataTermino);
 
-            if (resultadoTop10Medicos.IsFailed)
-                return NotFound(resultadoTop10Medicos.Errors);
+            if (resultadoGet.IsFailed)
+                return NotFound(resultadoGet.Errors);
 
-            return Ok(mapeador.Map<List<ListarMedicoViewModel>>(resultadoTop10Medicos.Value));
+            return Ok(mapeador.Map<List<MedicoComHorasVM>>(resultadoGet.Value));
 
         }
     }
