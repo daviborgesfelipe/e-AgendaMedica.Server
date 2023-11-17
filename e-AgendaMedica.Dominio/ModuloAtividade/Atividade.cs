@@ -16,7 +16,6 @@ namespace e_AgendaMedica.Dominio.ModuloAtividade
         public TimeSpan HorarioInicio { get; set; }
         public TipoAtividadeEnum TipoAtividade { get; set; }
 
-        public Medico MedicoResponsavel { get; set; }
         public List<Medico> ListaMedicos { get; set; }
 
         public bool ConflitoCom(Atividade outraAtividade)
