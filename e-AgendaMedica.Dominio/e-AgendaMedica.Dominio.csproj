@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -6,14 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
-  <ItemGroup>
-  	<Folder Include="Compartilhado\" />
-  	<Folder Include="ModuloAtividade\" />
-  	<Folder Include="ModuloMedico\" />
-  </ItemGroup>
 	
   <ItemGroup>
+    <PackageReference Include="FluentResults" Version="3.14.0" />
     <PackageReference Include="FluentValidation" Version="11.8.0" />
     <PackageReference Include="SequentialGuidGenerator" Version="1.1.0" />
   </ItemGroup>

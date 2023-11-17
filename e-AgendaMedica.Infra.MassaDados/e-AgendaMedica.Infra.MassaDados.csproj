@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>e_AgendaMedica.Infra.MassaDados</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\e-AgendaMedica.Aplicacao\e-AgendaMedica.Aplicacao.csproj" />
+    <ProjectReference Include="..\e-AgendaMedica.Dominio\e-AgendaMedica.Dominio.csproj" />
+    <ProjectReference Include="..\e-AgendaMedica.Infra.Orm\e-AgendaMedica.Infra.Orm.csproj" />
+  </ItemGroup>
+
+</Project>
