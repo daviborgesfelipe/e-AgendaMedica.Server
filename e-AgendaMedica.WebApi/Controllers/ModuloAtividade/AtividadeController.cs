@@ -1,7 +1,5 @@
-﻿using e_AgendaMedica.Aplicacao.ModuloAtividade;
-using e_AgendaMedica.Aplicacao.ModuloMedico;
-using e_AgendaMedica.Dominio.ModuloAtividade;
-using e_AgendaMedica.Dominio.ModuloMedico;
+﻿using e_AgendaMedica.Dominio.ModuloAtividade;
+using e_AgendaMedica.Dominio.ModuloAtividade.Interfaces;
 using e_AgendaMedica.WebApi.Controllers.Compartilhado;
 using e_AgendaMedica.WebApi.ViewModels.ModuloAtividade;
 using e_AgendaMedica.WebApi.ViewModels.ModuloMedico;
@@ -40,7 +38,7 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloAtividade
         [ProducesResponseType(typeof(string[]), 500)]
         public async Task<IActionResult> GetAll()
         {
-            var resultadoGetAll = await servicoAtividade.SelecionarTodosAsync();
+            var resultadoGetAll = await servicoAtividade.ObterTodosAsync();
 
             if (resultadoGetAll.IsFailed)
                 return NotFound(resultadoGetAll.Errors);
@@ -54,7 +52,7 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloAtividade
         [ProducesResponseType(typeof(string[]), 500)]
         public async Task<IActionResult> GetCompleteById(Guid id)
         {
-            var resultadoGet = await servicoAtividade.SelecionarPorIdAsync(id);
+            var resultadoGet = await servicoAtividade.ObterPorIdAsync(id);
 
             if (resultadoGet.IsFailed)
                 return NotFound(resultadoGet.Errors);
@@ -68,7 +66,7 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloAtividade
         [ProducesResponseType(typeof(string[]), 500)]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var resultadoGet = await servicoAtividade.SelecionarPorIdAsync(id);
+            var resultadoGet = await servicoAtividade.ObterPorIdAsync(id);
 
             if (resultadoGet.IsFailed)
                 return NotFound(resultadoGet.Errors);
@@ -86,7 +84,7 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloAtividade
             EditarAtividadeViewModel atividadeViewModel
         )
         {
-            var resultadoGet = await servicoAtividade.SelecionarPorIdAsync(id);
+            var resultadoGet = await servicoAtividade.ObterPorIdAsync(id);
 
             if (resultadoGet.IsFailed)
                 return NotFound(resultadoGet.Errors);
@@ -104,7 +102,7 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloAtividade
         [ProducesResponseType(typeof(string[]), 500)]
         public async Task<IActionResult> DeleteById(Guid id)
         {
-            var resultadoSelecao = await servicoAtividade.SelecionarPorIdAsync(id);
+            var resultadoSelecao = await servicoAtividade.ObterPorIdAsync(id);
 
             if (resultadoSelecao.IsFailed)
                 return NotFound(resultadoSelecao.Errors);
@@ -112,6 +110,21 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloAtividade
             var resultadoDelete = await servicoAtividade.ExcluirAsync(resultadoSelecao.Value);
 
             return ProcessarResultado(resultadoDelete.ToResult());
+        }
+
+        [HttpGet("medicos-mais-horas-trabalhadas/{dataInicio:datetime}/{dataTermino:datetime}")]
+        [ProducesResponseType(typeof(ListarMedicoViewModel), 201)]
+        [ProducesResponseType(typeof(string[]), 404)]
+        [ProducesResponseType(typeof(string[]), 500)]
+        public async Task<IActionResult> ObterMedicosMaisHorasTrabalhadas( DateTime dataInicio, DateTime dataTermino)//route constraint
+        {
+            var resultadoTop10Medicos = await servicoAtividade.ObterMedicosMaisHorasTrabalhadas(dataInicio, dataTermino);
+
+            if (resultadoTop10Medicos.IsFailed)
+                return NotFound(resultadoTop10Medicos.Errors);
+
+            return Ok(mapeador.Map<List<ListarMedicoViewModel>>(resultadoTop10Medicos.Value));
+
         }
     }
 }
