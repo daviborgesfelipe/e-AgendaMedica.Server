@@ -10,17 +10,10 @@
       <Property Name="ListaMedicos" />
     </ShowAsCollectionAssociation>
   </Class>
-  <Class Name="e_AgendaMedica.Dominio.ModuloMedico.EquipeMedica">
-    <Position X="2.25" Y="3.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAQA=</HashCode>
-      <FileName>ModuloMedico\EquipeMedica.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="e_AgendaMedica.Dominio.ModuloMedico.Medico">
     <Position X="2.25" Y="0.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAIAAAAAAAAAAAAAAAAAAIAACAEAAAAAAAAAkAAAA=</HashCode>
+      <HashCode>AAAAIAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAkAAAA=</HashCode>
       <FileName>ModuloMedico\Medico.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>

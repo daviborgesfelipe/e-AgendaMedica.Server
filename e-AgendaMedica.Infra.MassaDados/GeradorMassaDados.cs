@@ -1,5 +1,7 @@
 ﻿using e_AgendaMedica.Dominio.ModuloAtividade;
+using e_AgendaMedica.Dominio.ModuloAtividade.Interfaces;
 using e_AgendaMedica.Dominio.ModuloMedico;
+using e_AgendaMedica.Dominio.ModuloMedico.Interfaces;
 
 namespace e_AgendaMedica.Infra.MassaDados
 {

@@ -1,8 +1,10 @@
-﻿using e_Agenda.Dominio.Compartilhado;
-using e_AgendaMedica.Aplicacao.ModuloAtividade;
+﻿using e_AgendaMedica.Aplicacao.ModuloAtividade;
 using e_AgendaMedica.Aplicacao.ModuloMedico;
+using e_AgendaMedica.Dominio.Compartilhado.Interfaces;
 using e_AgendaMedica.Dominio.ModuloAtividade;
+using e_AgendaMedica.Dominio.ModuloAtividade.Interfaces;
 using e_AgendaMedica.Dominio.ModuloMedico;
+using e_AgendaMedica.Dominio.ModuloMedico.Interfaces;
 using e_AgendaMedica.Infra.MassaDados;
 using e_AgendaMedica.Infra.Orm.Compartilhado;
 using e_AgendaMedica.Infra.Orm.ModuloAtividade;
@@ -19,17 +21,7 @@ namespace e_AgendaMedica.WebApi.Config
 
             services.AddDbContext<IContextoPersistencia, eAgendaMedicaDbContext>(optionsBuilder =>
             {
-                //optionsBuilder.UseSqlServer(connectionString);
-
-                optionsBuilder.UseSqlServer(connectionString, sqlServerOptionsAction: sqlOptions =>
-                {
-                    sqlOptions.EnableRetryOnFailure();
-                });
-
-                //optionsBuilder.UseSqlServer(connectionString, options =>
-                //{
-                //    options.EnableRetryOnFailure();
-                //});
+                optionsBuilder.UseSqlServer(connectionString);
             });
 
             services.AddTransient<IRepositorioMedico, RepositorioMedicoOrm>();

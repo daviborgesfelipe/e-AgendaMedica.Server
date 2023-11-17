@@ -1,5 +1,5 @@
 ﻿using e_AgendaMedica.Dominio.ModuloAtividade;
-using e_AgendaMedica.Dominio.ModuloMedico;
+using e_AgendaMedica.Dominio.ModuloMedico.Interfaces;
 using e_AgendaMedica.WebApi.ViewModels.ModuloAtividade;
 
 namespace e_AgendaMedica.WebApi.Config.AutoMapperConfig
@@ -27,7 +27,7 @@ namespace e_AgendaMedica.WebApi.Config.AutoMapperConfig
             {
                 foreach (var novoGuid in novosGuids)
                 {
-                    var novoMedico = repositorioMedico.SelecionarPorIdAsync(novoGuid);
+                    var novoMedico = repositorioMedico.ObterPorIdAsync(novoGuid);
                     if (novoMedico != null)
                     {
                         destination.ListaMedicos.Add(novoMedico.Result);

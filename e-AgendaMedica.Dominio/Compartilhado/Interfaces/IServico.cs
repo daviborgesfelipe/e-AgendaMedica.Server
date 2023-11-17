@@ -1,6 +1,6 @@
 ﻿using FluentResults;
 
-namespace e_AgendaMedica.Dominio.Compartilhado
+namespace e_AgendaMedica.Dominio.Compartilhado.Interfaces
 {
     public interface IServico<T> where T : EntidadeBase<T>
     {
@@ -10,8 +10,8 @@ namespace e_AgendaMedica.Dominio.Compartilhado
 
         Task<Result<T>> InserirAsync(T novoRegistro);
 
-        Task<Result<List<T>>> SelecionarTodosAsync();
+        Task<Result<List<T>>> ObterTodosAsync();
 
-        Task<Result<T>> SelecionarPorIdAsync(Guid numero);
+        Task<Result<T>> ObterPorIdAsync(Guid numero);
     }
 }

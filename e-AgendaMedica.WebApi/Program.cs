@@ -1,10 +1,5 @@
-using e_Agenda.Dominio.Compartilhado;
-using e_AgendaMedica.Infra.MassaDados;
 using FluentValidation;
-using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Models;
 using System.Globalization;
-using System.Text.Json.Serialization;
 
 namespace e_AgendaMedica.WebApi
 {
@@ -43,7 +38,7 @@ namespace e_AgendaMedica.WebApi
             }
    
             // Verificar se o banco de dados existe
-            app.UseMassaDados();
+            app.CriarBancoDadosComMassaDados();
 
             app.UseHttpsRedirection();
 

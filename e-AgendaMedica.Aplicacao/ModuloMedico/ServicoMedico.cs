@@ -1,7 +1,8 @@
-﻿using e_Agenda.Dominio.Compartilhado;
-using e_AgendaMedica.Aplicacao.Compartilhado;
-using e_AgendaMedica.Dominio.ModuloAtividade;
+﻿using e_AgendaMedica.Aplicacao.Compartilhado;
+using e_AgendaMedica.Dominio.Compartilhado.Interfaces;
+using e_AgendaMedica.Dominio.ModuloAtividade.Interfaces;
 using e_AgendaMedica.Dominio.ModuloMedico;
+using e_AgendaMedica.Dominio.ModuloMedico.Interfaces;
 using FluentResults;
 using Serilog;
 
@@ -38,7 +39,7 @@ namespace e_AgendaMedica.Aplicacao.ModuloMedico
 
         public async Task<Result<Medico>> Editar(Medico medico)
         {
-            var resultadoGet = await repositorioMedico.SelecionarPorIdAsync(medico.Id);
+            var resultadoGet = await repositorioMedico.ObterPorIdAsync(medico.Id);
 
             if (resultadoGet == null)
                 return Result.Fail($"Medico com ID {medico.Id} não encontrado.");
@@ -64,7 +65,7 @@ namespace e_AgendaMedica.Aplicacao.ModuloMedico
          
         public async Task<Result> Excluir(Guid id)
         {
-            var medicoResult = await SelecionarPorIdAsync(id);
+            var medicoResult = await ObterPorIdAsync(id);
 
             if (medicoResult.IsSuccess)
                 return await Excluir(medicoResult.Value);
@@ -81,9 +82,9 @@ namespace e_AgendaMedica.Aplicacao.ModuloMedico
             return Result.Ok();
         }
 
-        public async Task<Result<Medico>> SelecionarPorIdAsync(Guid id)
+        public async Task<Result<Medico>> ObterPorIdAsync(Guid id)
         {
-            var contato = await repositorioMedico.SelecionarPorIdAsync(id);
+            var contato = await repositorioMedico.ObterPorIdAsync(id);
 
             if (contato == null)
             {
@@ -95,9 +96,9 @@ namespace e_AgendaMedica.Aplicacao.ModuloMedico
             return Result.Ok(contato);
         }
 
-        public async Task<Result<List<Medico>>> SelecionarTodosAsync()
+        public async Task<Result<List<Medico>>> ObterTodosAsync()
         {
-            var contatos = await repositorioMedico.SelecionarTodosAsync();
+            var contatos = await repositorioMedico.ObterTodosAsync();
 
             return Result.Ok(contatos);
         }
@@ -105,7 +106,7 @@ namespace e_AgendaMedica.Aplicacao.ModuloMedico
         public async Task<Result<Medico>> ExcluirAsync(Medico medico)
         {
             // Verifica se o médico está associado a alguma atividade do tipo cirurgia
-            var atividadesCirurgicas = await repositorioAtividade.SelecionarAtividadesCirurgicasComMedicoAsync(medico.Id);
+            var atividadesCirurgicas = await repositorioAtividade.ObterAtividadesCirurgicasComMedicoAsync(medico.Id);
 
             if (atividadesCirurgicas.Any())
             {

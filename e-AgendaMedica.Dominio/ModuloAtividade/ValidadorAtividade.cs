@@ -1,4 +1,5 @@
 ﻿using e_AgendaMedica.Dominio.Compartilhado;
+using e_AgendaMedica.Dominio.ModuloAtividade.Interfaces;
 using FluentValidation;
 
 namespace e_AgendaMedica.Dominio.ModuloAtividade

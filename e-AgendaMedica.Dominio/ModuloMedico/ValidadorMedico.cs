@@ -1,6 +1,7 @@
 ﻿using FluentValidation.Validators;
 using FluentValidation;
 using e_AgendaMedica.Dominio.Compartilhado;
+using e_AgendaMedica.Dominio.ModuloMedico.Interfaces;
 
 namespace e_AgendaMedica.Dominio.ModuloMedico
 {

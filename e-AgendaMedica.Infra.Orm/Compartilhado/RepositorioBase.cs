@@ -1,5 +1,5 @@
-﻿using e_Agenda.Dominio.Compartilhado;
-using e_AgendaMedica.Dominio.Compartilhado;
+﻿using e_AgendaMedica.Dominio.Compartilhado;
+using e_AgendaMedica.Dominio.Compartilhado.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace e_AgendaMedica.Infra.Orm.Compartilhado
@@ -32,13 +32,13 @@ namespace e_AgendaMedica.Infra.Orm.Compartilhado
             return true;
         }
         
-        public virtual async Task<TEntity> SelecionarPorIdAsync(Guid id)
+        public virtual async Task<TEntity> ObterPorIdAsync(Guid id)
         {
             return await registros
                 .SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public virtual async Task<List<TEntity>> SelecionarTodosAsync()
+        public virtual async Task<List<TEntity>> ObterTodosAsync()
         {
             return await registros.ToListAsync();
         }

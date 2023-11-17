@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using e_AgendaMedica.Dominio.ModuloAtividade;
+using FluentValidation;
 
 namespace e_AgendaMedica.Dominio.Compartilhado
 {

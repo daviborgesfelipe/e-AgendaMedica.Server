@@ -1,4 +1,4 @@
-﻿namespace e_Agenda.Dominio.Compartilhado
+﻿namespace e_AgendaMedica.Dominio.Compartilhado.Interfaces
 {
     public interface IContextoPersistencia
     {

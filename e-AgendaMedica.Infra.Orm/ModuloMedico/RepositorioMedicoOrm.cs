@@ -1,6 +1,7 @@
-﻿using e_Agenda.Dominio.Compartilhado;
+﻿using e_AgendaMedica.Dominio.Compartilhado.Interfaces;
 using e_AgendaMedica.Dominio.ModuloAtividade;
 using e_AgendaMedica.Dominio.ModuloMedico;
+using e_AgendaMedica.Dominio.ModuloMedico.Interfaces;
 using e_AgendaMedica.Infra.Orm.Compartilhado;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,12 +13,12 @@ namespace e_AgendaMedica.Infra.Orm.ModuloMedico
         {
 
         }
-        public List<Medico> SelecionarMuitos(List<Guid> idsMedicosSelecionados)
+        public async Task<List<Medico>> ObterMuitos(List<Guid> idsMedicosSelecionados)
         {
-            return registros.Where(medicos => idsMedicosSelecionados.Contains(medicos.Id)).ToList();
+            return await registros.Where(medicos => idsMedicosSelecionados.Contains(medicos.Id)).ToListAsync();
         }
 
-        public override async Task<Medico> SelecionarPorIdAsync(Guid id)
+        public override async Task<Medico> ObterPorIdAsync(Guid id)
         {
             return await registros
                 .Include(x => x.ListaAtividades)

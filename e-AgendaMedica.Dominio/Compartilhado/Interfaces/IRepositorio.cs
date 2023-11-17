@@ -1,4 +1,4 @@
-﻿namespace e_AgendaMedica.Dominio.Compartilhado
+﻿namespace e_AgendaMedica.Dominio.Compartilhado.Interfaces
 {
     public interface IRepositorio<T> where T : EntidadeBase<T>
     {
@@ -8,8 +8,8 @@
 
         Task<bool> InserirAsync(T novoRegistro);
 
-        Task<List<T>> SelecionarTodosAsync();
+        Task<List<T>> ObterTodosAsync();
 
-        Task<T> SelecionarPorIdAsync(Guid numero);
+        Task<T> ObterPorIdAsync(Guid numero);
     }
 }

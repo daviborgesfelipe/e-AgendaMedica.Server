@@ -1,5 +1,5 @@
 ﻿using e_AgendaMedica.Dominio.ModuloAtividade;
-using e_AgendaMedica.Dominio.ModuloMedico;
+using e_AgendaMedica.Dominio.ModuloMedico.Interfaces;
 using e_AgendaMedica.WebApi.ViewModels.ModuloAtividade;
 
 namespace e_AgendaMedica.WebApi.Config.AutoMapperConfig
@@ -15,7 +15,7 @@ namespace e_AgendaMedica.WebApi.Config.AutoMapperConfig
 
         public void Process(InserirAtividadeViewModel source, Atividade destination, ResolutionContext context)
         {
-            destination.ListaMedicos = repositorioMedico.SelecionarMuitos(source.ListaMedicos);
+            destination.ListaMedicos = repositorioMedico.ObterMuitos(source.ListaMedicos).Result;
         }
     }
 }

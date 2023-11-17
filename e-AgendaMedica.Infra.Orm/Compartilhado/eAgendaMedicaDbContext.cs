@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Serilog;
 using System.Reflection;
-using e_Agenda.Dominio.Compartilhado;
+using e_AgendaMedica.Dominio.Compartilhado.Interfaces;
 
 namespace e_AgendaMedica.Infra.Orm.Compartilhado
 {

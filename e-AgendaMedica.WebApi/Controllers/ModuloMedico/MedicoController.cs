@@ -1,5 +1,6 @@
 ﻿using e_AgendaMedica.Aplicacao.ModuloMedico;
 using e_AgendaMedica.Dominio.ModuloMedico;
+using e_AgendaMedica.Dominio.ModuloMedico.Interfaces;
 using e_AgendaMedica.WebApi.Controllers.Compartilhado;
 using e_AgendaMedica.WebApi.ViewModels.ModuloMedico;
 
@@ -38,7 +39,7 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloMedico
         [ProducesResponseType(typeof(string[]), 500)]
         public async Task<IActionResult> GetAll()
         {
-            var resultadoGetAll = await servicoMedico.SelecionarTodosAsync();
+            var resultadoGetAll = await servicoMedico.ObterTodosAsync();
 
             if (resultadoGetAll.IsFailed)
                 return NotFound(resultadoGetAll.Errors);
@@ -52,7 +53,7 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloMedico
         [ProducesResponseType(typeof(string[]), 500)]
         public async Task<IActionResult> GetCompleteById(Guid id)
         {
-            var resultadoGet = await servicoMedico.SelecionarPorIdAsync(id);
+            var resultadoGet = await servicoMedico.ObterPorIdAsync(id);
 
             if (resultadoGet.IsFailed)
                 return NotFound(resultadoGet.Errors);
@@ -66,7 +67,7 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloMedico
         [ProducesResponseType(typeof(string[]), 500)]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var resultadoGet = await servicoMedico.SelecionarPorIdAsync(id);
+            var resultadoGet = await servicoMedico.ObterPorIdAsync(id);
 
             if (resultadoGet.IsFailed)
                 return NotFound(resultadoGet.Errors);
@@ -84,7 +85,7 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloMedico
             EditarMedicoViewModel medicoViewModel
         )
         {
-            var resultadoGet = await servicoMedico.SelecionarPorIdAsync(id);
+            var resultadoGet = await servicoMedico.ObterPorIdAsync(id);
 
             if (resultadoGet.IsFailed)
                 return NotFound(resultadoGet.Errors);
@@ -103,7 +104,7 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloMedico
         [ProducesResponseType(typeof(string[]), 500)]
         public async Task<IActionResult> DeleteById(Guid id)
         {
-            var resultadoSelecao = await servicoMedico.SelecionarPorIdAsync(id);
+            var resultadoSelecao = await servicoMedico.ObterPorIdAsync(id);
 
             if (resultadoSelecao.IsFailed)
                 return NotFound(resultadoSelecao.Errors);
