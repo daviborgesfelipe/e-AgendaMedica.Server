@@ -8,6 +8,7 @@
             {
                 opt.AddProfile<MedicoProfile>();
                 opt.AddProfile<AtividadeProfile>();
+                opt.AddProfile<UsuarioProfille>();
             });
         }
     }

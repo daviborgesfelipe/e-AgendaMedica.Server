@@ -1,5 +1,7 @@
-﻿using e_AgendaMedica.Aplicacao.Compartilhado;
+﻿using AutoMapper;
+using e_AgendaMedica.Aplicacao.Compartilhado;
 using e_AgendaMedica.Dominio.Compartilhado.Interfaces;
+using e_AgendaMedica.Dominio.ModuloAtividade;
 using e_AgendaMedica.Dominio.ModuloAtividade.Interfaces;
 using e_AgendaMedica.Dominio.ModuloMedico;
 using e_AgendaMedica.Dominio.ModuloMedico.Interfaces;
@@ -13,14 +15,17 @@ namespace e_AgendaMedica.Aplicacao.ModuloMedico
         private IRepositorioMedico repositorioMedico;
         private IContextoPersistencia contextoPersistencia;
         private IRepositorioAtividade repositorioAtividade;
+        private IMapper mapeador;
 
         public ServicoMedico(IRepositorioMedico repositorioMedico,
                              IContextoPersistencia contextoPersistencia,
-                             IRepositorioAtividade repositorioAtividade)
+                             IRepositorioAtividade repositorioAtividade,
+                             IMapper mapeador)
         {
             this.repositorioMedico = repositorioMedico;
             this.contextoPersistencia = contextoPersistencia;
             this.repositorioAtividade = repositorioAtividade;
+            this.mapeador = mapeador;
         }
 
         public async Task<Result<Medico>> InserirAsync(Medico medico)
@@ -111,6 +116,9 @@ namespace e_AgendaMedica.Aplicacao.ModuloMedico
             if (atividadesCirurgicas.Any())
             {
                 // Se o médico estiver associado a alguma atividade do tipo cirurgia, impede a exclusão
+                Log.Logger.Warning("Medico de Id:{MedicoId}, não é possível excluir um médico que está associado a uma atividade do tipo cirurgia.", medico.Id);
+
+
                 return Result.Fail<Medico>("Não é possível excluir um médico que está associado a uma atividade do tipo cirurgia.");
             }
 
@@ -119,6 +127,42 @@ namespace e_AgendaMedica.Aplicacao.ModuloMedico
             await contextoPersistencia.GravarDadosAsync();
 
             return Result.Ok();
+        }
+
+        public async Task<Result<List<MedicoComHorasVM>>> ObterMedicosMaisHorasTrabalhadas(DateTime dataInicio, DateTime dataFim)
+        {
+            var listaAtividadesNoPeriodo = await repositorioAtividade.ObterAtividadesNoPeriodoAsync(dataInicio, dataFim);
+
+            var horasTrabalhadasPorMedico = new Dictionary<Guid, TimeSpan>();
+
+            foreach (var atividade in listaAtividadesNoPeriodo)
+            {
+                var atividadeComMedico = await repositorioAtividade.ObterPorIdAsync(atividade.Id);
+                foreach (var medico in atividadeComMedico.ListaMedicos)
+                {
+                    if (!horasTrabalhadasPorMedico.ContainsKey(medico.Id))
+                    {
+                        horasTrabalhadasPorMedico[medico.Id] = TimeSpan.Zero;
+                    }
+
+                    horasTrabalhadasPorMedico[medico.Id] += atividade.HorarioTermino - atividade.HorarioInicio;
+                }
+            }
+
+            var listaIdsMedicosMaisHorasTrabalhadas =
+                    horasTrabalhadasPorMedico.OrderByDescending(medicoHoras => medicoHoras.Value)
+                                  .Take(10)
+                                  .Select(medicoHoras => medicoHoras.Key)
+                                  .ToList();
+
+            var listaMedicos = await repositorioMedico.ObterMuitos(listaIdsMedicosMaisHorasTrabalhadas);
+
+            var listaMedicosFinal = mapeador.Map<List<MedicoComHorasVM>>(listaMedicos.ToResult().Value);
+
+            foreach (var medico in listaMedicosFinal)
+                medico.TotalHorasTrabalhadas += horasTrabalhadasPorMedico.GetValueOrDefault(medico.Id, TimeSpan.Zero);
+
+            return Result.Ok(listaMedicosFinal);
         }
     }
 }

@@ -22,11 +22,15 @@ namespace e_AgendaMedica.WebApi
 
             builder.Services.ConfigurarInjecaoDependencia(builder.Configuration);
 
+            builder.Services.ConfigurarJwt();
+
             builder.Services.ConfigurarSwagger();
 
             builder.Services.ConfigurarControllers();
 
             builder.Services.AddEndpointsApiExplorer();
+
+            builder.Services.ConfigurarJwt();
 
             var app = builder.Build();
 

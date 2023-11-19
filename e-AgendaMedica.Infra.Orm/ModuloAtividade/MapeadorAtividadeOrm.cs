@@ -21,6 +21,12 @@ namespace e_AgendaMedica.Infra.Orm.ModuloAtividade
                 .WithMany(m => m.ListaAtividades)
                 .UsingEntity(j => j.ToTable("TBAtividades_TBMedicos"));
 
+            builder.HasOne(a => a.Usuario)
+                .WithMany()
+                .IsRequired(false)
+                .HasForeignKey(x => x.UsuarioId)
+                .OnDelete(DeleteBehavior.NoAction);
+
         }
     }
 }

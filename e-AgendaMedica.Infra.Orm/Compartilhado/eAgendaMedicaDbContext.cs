@@ -3,10 +3,13 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using System.Reflection;
 using e_AgendaMedica.Dominio.Compartilhado.Interfaces;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using e_AgendaMedica.Dominio.ModuloAutenticacao;
+using Microsoft.AspNetCore.Identity;
 
 namespace e_AgendaMedica.Infra.Orm.Compartilhado
 {
-    public class eAgendaMedicaDbContext : DbContext, IContextoPersistencia
+    public class eAgendaMedicaDbContext : IdentityDbContext<Usuario, IdentityRole<Guid>, Guid>, IContextoPersistencia
     {
 
         public eAgendaMedicaDbContext(DbContextOptions options) : base(options)

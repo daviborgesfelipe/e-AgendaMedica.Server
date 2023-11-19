@@ -16,6 +16,12 @@ namespace e_AgendaMedica.Infra.Orm.ModuloMedico
             builder.Property(x => x.CRM).HasColumnType("varchar(20)").IsRequired(required: false);
 
             builder.HasMany(x => x.ListaAtividades);
+
+            builder.HasOne(a => a.Usuario)
+                .WithMany()
+                .IsRequired(false)
+                .HasForeignKey(x => x.UsuarioId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

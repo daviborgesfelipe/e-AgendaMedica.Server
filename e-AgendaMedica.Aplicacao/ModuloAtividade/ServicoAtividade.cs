@@ -37,6 +37,7 @@ namespace e_AgendaMedica.Aplicacao.ModuloAtividade
 
             if (await ConflitoComOutrasAtividades(atividade))
             {
+                Log.Logger.Warning("Atividade de Id:{AtividadeId}, tem conflito de horários com outras atividades.", atividade.Id);
                 return Result.Fail("Conflito de horários com outras atividades.");
             }
 

@@ -27,7 +27,7 @@ namespace e_AgendaMedica.Infra.Orm.ModuloAtividade
         }
 
         #region Conferir Conflito 
-
+        
         public async Task<Atividade> ObterUltimaAtividadeConcluidaDoMedicoAsync(Guid medicoId)
         {
             var ultimaAtividade = await registros
