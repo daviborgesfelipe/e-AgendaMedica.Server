@@ -28,15 +28,11 @@ namespace e_AgendaMedica.Infra.Orm.ModuloAtividade
 
         #region Conferir Conflito 
 
-        public async Task<Atividade> ObterUltimaAtividadeConcluidaDoMedicoAsync(Guid medicoId)
+        public async Task<List<Atividade>> ObterAtividadesDoMedicoAsync(Guid Id)
         {
-            var ultimaAtividade = await registros
-                .Include(a => a.ListaMedicos)
-                .Where(a => a.ListaMedicos.Any(m => m.Id == medicoId) && a.HorarioTermino < DateTime.Now.TimeOfDay)
-                .OrderByDescending(a => a.HorarioTermino)
-                .FirstOrDefaultAsync();
-
-            return ultimaAtividade;
+            return registros
+                .Where(x => x.ListaMedicos.Any(x => x.Id == Id))
+                .ToList();
         }
 
         public async Task<List<Atividade>> ObterAtividadesDoMedicoAsync(List<Medico> medicos)
@@ -44,7 +40,9 @@ namespace e_AgendaMedica.Infra.Orm.ModuloAtividade
             var idsMedicos = medicos.Select(medico => medico.Id).ToList();
 
             return await registros
-                .Where(atividade => atividade.ListaMedicos.Any(medico => idsMedicos.Contains(medico.Id)))
+                .Where(atividade => 
+                        atividade.ListaMedicos.Any(medico => 
+                            idsMedicos.Contains(medico.Id)))
                 .ToListAsync();
         }
 
