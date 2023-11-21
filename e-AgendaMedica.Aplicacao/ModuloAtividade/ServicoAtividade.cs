@@ -101,6 +101,7 @@ namespace e_AgendaMedica.Aplicacao.ModuloAtividade
             if (!await VerificarTempoRecuperacaoNecessario(atividade))
             {
                 Log.Logger.Warning("Tempo de recuperação insuficiente para atividade de cirurgia do médico. Atividade de Id:{AtividadeId}", atividade.Id);
+                
                 return Result.Fail<Atividade>("Tempo de recuperação insuficiente para atividade de cirurgia do médico.");
             }
 
@@ -193,13 +194,18 @@ namespace e_AgendaMedica.Aplicacao.ModuloAtividade
                     ? TimeSpan.FromHours(4)
                     : TimeSpan.FromMinutes(20);
 
-                var ultimaAtividadeConcluida = await repositorioAtividade.ObterUltimaAtividadeConcluidaDoMedicoAsync(medico.Id);
-
-                if (ultimaAtividadeConcluida != null &&
-                    atividade.Data <= (ultimaAtividadeConcluida.Data += ultimaAtividadeConcluida.HorarioTermino.Add(tempoRecuperacaoNecessario)))
+                var atividadeConcluida = await repositorioAtividade.ObterAtividadesDoMedicoAsync(medico.Id);
+                
+                foreach (var item in atividadeConcluida)
                 {
-                    Log.Logger.Warning("Tempo de recuperação insuficiente para atividade do médico {MedicoId}. Atividade de Id:{AtividadeId}", medico.Id, atividade.Id);
-                    return false;
+                    var diferencaAtual2 = atividade.HorarioInicio - item.HorarioTermino;
+                    
+                    if (item.Data == atividade.Data
+                    && diferencaAtual2 <= tempoRecuperacaoNecessario)
+                    {
+                        Log.Logger.Warning("Tempo de recuperação insuficiente para atividade do médico {MedicoId}. Atividade de Id:{AtividadeId}", medico.Id, atividade.Id);
+                        return false;
+                    }
                 }
             }
 
