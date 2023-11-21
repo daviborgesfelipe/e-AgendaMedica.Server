@@ -9,7 +9,7 @@ namespace e_AgendaMedica.WebApi.Config.Converters
         public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var value = reader.GetString();
-            return DateTime.ParseExact(value, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            return DateTime.ParseExact(value, "yyyy/MM/dd", CultureInfo.InvariantCulture);
         }
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
