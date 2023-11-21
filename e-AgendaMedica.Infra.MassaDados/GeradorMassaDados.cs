@@ -21,12 +21,12 @@ namespace e_AgendaMedica.Infra.MassaDados
             // Gerar alguns médicos
             var medicos = new List<Medico>
             {
-                new Medico("Dr. Joel Lio", "Ortopedista", "67890-SC"),
-                new Medico("Dr. Pen Samento", "Neurologista", "12345-SP"),
-                new Medico("Dr. Lucas Mendes", "Oftalmologista", "22222-PR"),
-                new Medico("Dra. Camila Rocha", "Dermatologista", "33333-RS"),
-                new Medico("Dra. Maria Silva", "Cardiologista", "54321-RJ"),
-                new Medico("Dr. André Santos", "Pneumologista", "98765-MG"),
+                new Medico("Joel Lio", "Ortopedista", "67890-SC"),
+                new Medico("Pen Samento", "Neurologista", "12345-SP"),
+                new Medico("Lucas Mendes", "Oftalmologista", "22222-PR"),
+                new Medico("Camila Rocha", "Dermatologista", "33333-RS"),
+                new Medico("Maria Silva", "Cardiologista", "54321-RJ"),
+                new Medico("André Santos", "Pneumologista", "98765-MG"),
             };
 
             foreach (var medico in medicos)
@@ -94,7 +94,7 @@ namespace e_AgendaMedica.Infra.MassaDados
                 new Atividade
                 {
                     Paciente = "Mariana",
-                    Data = DateTime.Today.AddDays(10),
+                    Data = DateTime.Today.AddDays(12),
                     HorarioInicio = TimeSpan.FromHours(13),
                     HorarioTermino = TimeSpan.FromHours(16),
                     TipoAtividade = TipoAtividadeEnum.Consulta,
@@ -112,7 +112,7 @@ namespace e_AgendaMedica.Infra.MassaDados
                 new Atividade
                 {
                     Paciente = "Gustavo",
-                    Data = DateTime.Today.AddDays(10),
+                    Data = DateTime.Today.AddDays(11),
                     HorarioInicio = TimeSpan.FromHours(07),
                     HorarioTermino = TimeSpan.FromHours(08),
                     TipoAtividade = TipoAtividadeEnum.Consulta,
@@ -134,7 +134,7 @@ namespace e_AgendaMedica.Infra.MassaDados
                     HorarioInicio = TimeSpan.FromHours(10),
                     HorarioTermino = TimeSpan.FromHours(11),
                     TipoAtividade = TipoAtividadeEnum.Consulta,
-                    ListaMedicos = medicos.GetRange(0, 4)
+                    ListaMedicos = medicos.GetRange(0, 2)
                 }
             };
 
