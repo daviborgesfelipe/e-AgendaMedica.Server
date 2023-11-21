@@ -21,9 +21,7 @@ namespace e_AgendaMedica.Dominio.ModuloAtividade
         public bool ConflitoCom(Atividade outraAtividade)
         {
             return this.Data == outraAtividade.Data &&
-                   ((this.HorarioInicio <= outraAtividade.HorarioTermino 
-                                        &&
-                     this.HorarioTermino >= outraAtividade.HorarioInicio));
+                   ((this.HorarioInicio <= outraAtividade.HorarioTermino && this.HorarioTermino >= outraAtividade.HorarioInicio)) && outraAtividade.Id != this.Id;
         }
     }
 }
