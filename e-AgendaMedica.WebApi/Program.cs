@@ -14,7 +14,16 @@ namespace e_AgendaMedica.WebApi
             builder.Services.Configure<ApiBehaviorOptions>(config =>
             {
                 config.SuppressModelStateInvalidFilter = true;
+            
             });
+
+            builder.Services.AddCors(opt =>
+                                     {
+                                         opt.AddPolicy("Desenvolvimento",
+                                         policy => policy.WithOrigins("http://localhost:4200")
+                                                         .AllowAnyHeader()
+                                                         .AllowAnyMethod());
+                                     });
 
             builder.Services.ConfigurarLogger(builder.Logging);
 
@@ -36,11 +45,13 @@ namespace e_AgendaMedica.WebApi
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-   
+   //CORS 
             // Verificar se o banco de dados existe
             app.CriarBancoDadosComMassaDados();
 
             app.UseHttpsRedirection();
+
+            app.UseCors("Desenvolvimento");
 
             app.UseAuthorization();
 
