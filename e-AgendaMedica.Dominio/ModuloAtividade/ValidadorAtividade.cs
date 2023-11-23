@@ -10,17 +10,19 @@ namespace e_AgendaMedica.Dominio.ModuloAtividade
         {
             RuleFor(x => x.Paciente)
                 .MinimumLength(3)
-                .NotNull().NotEmpty();
+                .NotNull().WithMessage("O campo paciente é obrigatório")
+                .NotEmpty().WithMessage("O campo paciente é obrigatório");
 
             RuleFor(x => x.Data)
-                .NotNull().NotEmpty();
+                .NotEqual(DateTime.MinValue).WithMessage("O campo data é obrigatório");
 
             RuleFor(x => x.HorarioTermino)
-                .NotNull().NotEmpty().GreaterThanOrEqualTo((x) => x.HorarioInicio)
-                .NotNull().NotEmpty();
+                .GreaterThanOrEqualTo((x) => x.HorarioInicio).WithMessage("O campo horario de termino não pode ser maior que o horario de inicio é obrigatório")
+                .NotEqual(TimeSpan.MinValue).WithMessage("O campo horario termino é obrigatório")
+                .NotEmpty().WithMessage("O campo horario termino é obrigatório");
 
             RuleFor(x => x.HorarioInicio)
-                .NotNull().NotEmpty();
+                .NotEqual(TimeSpan.MinValue).WithMessage("O campo horario inicio é obrigatório");
 
             //RuleFor(x => x.TipoAtividade)
             //    .Equal(TipoAtividadeEnum.Cirurgia)
@@ -36,7 +38,8 @@ namespace e_AgendaMedica.Dominio.ModuloAtividade
             RuleFor(x => x.TipoAtividade);
 
             RuleFor(x => x.ListaMedicos)
-                .NotNull().NotEmpty();
+                .NotNull().WithMessage("O campo lista de pacientes é obrigatório")
+                .NotEmpty().WithMessage("O campo lista de pacientes é obrigatório");
         }
     }
 }
