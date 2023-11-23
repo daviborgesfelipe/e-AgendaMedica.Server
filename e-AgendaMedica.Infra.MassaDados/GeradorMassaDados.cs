@@ -18,7 +18,7 @@ namespace e_AgendaMedica.Infra.MassaDados
 
         public async Task GerarDadosAsync()
         {
-            // Gerar alguns médicos
+            // Gerar alguns médicos atribuindo o valor das prop via ctor
             var medicos = new List<Medico>
             {
                 new Medico("Joel Lio", "Ortopedista", "67890-SC"),
@@ -34,7 +34,7 @@ namespace e_AgendaMedica.Infra.MassaDados
                 await _servicoMedico.InserirAsync(medico);
             }
 
-            // Gerar algumas atividades
+            // Gerar algumas atividades atribuindo o via inicializador de objeto
             var atividades = new List<Atividade>
             {
                 new Atividade
