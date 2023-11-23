@@ -22,7 +22,10 @@ namespace e_AgendaMedica.Infra.Orm.ModuloAtividade
         public async Task<List<Atividade>> ObterAtividadesNoPeriodoAsync(DateTime dataInicio, DateTime dataFim)
         {
             return registros
-                .Where(atividade => atividade.Data >= dataInicio && atividade.Data <= dataFim)
+                .Where(atividade => 
+                        atividade.Data >= dataInicio 
+                        && 
+                        atividade.Data <= dataFim)
                 .ToList();
         }
 
@@ -49,7 +52,11 @@ namespace e_AgendaMedica.Infra.Orm.ModuloAtividade
         public async Task<List<Atividade>> ObterAtividadesCirurgicasComMedicoAsync(Guid medicoId)
         {
             return await registros
-                .Where(atividade => atividade.ListaMedicos.Any(medico => medico.Id == medicoId) && atividade.TipoAtividade == TipoAtividadeEnum.Cirurgia)
+                .Where(atividade => 
+                       atividade.ListaMedicos.Any(medico =>
+                                medico.Id == medicoId)  
+                                && 
+                                atividade.TipoAtividade == TipoAtividadeEnum.Cirurgia)
                 .ToListAsync();
         }
         #endregion
