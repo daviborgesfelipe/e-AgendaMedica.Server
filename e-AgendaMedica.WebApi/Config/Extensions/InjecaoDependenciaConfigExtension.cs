@@ -11,7 +11,7 @@ using e_AgendaMedica.Infra.Orm.ModuloAtividade;
 using e_AgendaMedica.Infra.Orm.ModuloMedico;
 using Microsoft.Extensions.Options;
 
-namespace e_AgendaMedica.WebApi.Config
+namespace e_AgendaMedica.WebApi.Config.Extensions
 {
     public static class InjecaoDependenciaConfigExtension
     {
