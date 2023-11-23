@@ -119,7 +119,7 @@ namespace e_AgendaMedica.Aplicacao.ModuloAtividade
 
             await contextoPersistencia.GravarDadosAsync();
 
-            return Result.Ok();
+            return Result.Ok(atividade);
         }
 
         public async Task<Result<Atividade>> ExcluirAsync(Atividade atividade)
