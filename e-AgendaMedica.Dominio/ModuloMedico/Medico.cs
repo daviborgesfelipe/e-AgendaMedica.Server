@@ -8,7 +8,7 @@ namespace e_AgendaMedica.Dominio.ModuloMedico
     {
         public Medico()
         {
-            
+            ListaAtividades = new List<Atividade>();
         }
         public Medico( string nome, string especialidade, string crm )
         {
@@ -23,5 +23,27 @@ namespace e_AgendaMedica.Dominio.ModuloMedico
 
         [JsonIgnore]
         public List<Atividade> ListaAtividades { get; set; }
+
+        public bool RegistrarAtividade(Atividade atividade)
+        {
+            if (this.ListaAtividades.Any(_ativ => _ativ.Id == atividade.Id))
+            {
+                return false;
+            }
+
+            if (ListaAtividades.Contains(atividade) == false)
+            {
+                atividade.RegistrarMedico(this);
+
+                return true;
+            }
+
+            return false;
+        }
+        public override bool Equals(object obj)
+        {
+            return obj is Medico medico &&
+                   Id == medico.Id;
+        }
     }
 }

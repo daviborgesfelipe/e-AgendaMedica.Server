@@ -10,14 +10,17 @@ namespace e_AgendaMedica.Dominio.ModuloMedico
         public ValidadorMedico()
         {
             RuleFor(x => x.Nome)
-                .NotNull().NotEmpty();
+                .NotNull()
+                .NotEmpty();
 
             RuleFor(x => x.Especialidade)
-                .NotNull().NotEmpty();
+                .NotNull()
+                .NotEmpty();
 
             RuleFor(x => x.CRM)
                 .CRM()
-                .NotNull().NotEmpty(); 
+                .NotNull()
+                .NotEmpty(); 
         }
 
     }
