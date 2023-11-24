@@ -39,15 +39,6 @@ namespace e_AgendaMedica.Infra.MassaDados
             {
                 new Atividade
                 {
-                    Paciente = "Jordan",
-                    Data = DateTime.Today.AddDays(1),
-                    HorarioInicio = TimeSpan.FromHours(9),
-                    HorarioTermino = TimeSpan.FromHours(11),
-                    TipoAtividade = TipoAtividadeEnum.Cirurgia,
-                    ListaMedicos = medicos
-                },
-                new Atividade
-                {
                     Paciente = "Ronaldo",
                     Data = DateTime.Today.AddDays(2),
                     HorarioInicio = TimeSpan.FromHours(14),
