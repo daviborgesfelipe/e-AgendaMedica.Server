@@ -1,5 +1,4 @@
-﻿using e_AgendaMedica.Aplicacao.ModuloMedico;
-using e_AgendaMedica.Dominio.ModuloMedico;
+﻿using e_AgendaMedica.Dominio.ModuloMedico;
 using e_AgendaMedica.Dominio.ModuloMedico.Interfaces;
 using e_AgendaMedica.WebApi.Controllers.Compartilhado;
 using e_AgendaMedica.WebApi.ViewModels.ModuloMedico;
