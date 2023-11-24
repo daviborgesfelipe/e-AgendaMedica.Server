@@ -1,3 +1,4 @@
+using e_AgendaMedica.WebApi.Config.Extensions;
 using FluentValidation;
 using System.Globalization;
 

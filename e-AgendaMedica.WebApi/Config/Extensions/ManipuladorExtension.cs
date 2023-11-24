@@ -2,11 +2,11 @@
 
 namespace e_AgendaMedica.WebApi.Config
 {
-    public class ManipuladorExcecoes
+    public class ManipuladorExtension
     {
         private readonly RequestDelegate requestDelegate;
 
-        public ManipuladorExcecoes(RequestDelegate requestDelegate)
+        public ManipuladorExtension(RequestDelegate requestDelegate)
         {
             this.requestDelegate = requestDelegate;
         }

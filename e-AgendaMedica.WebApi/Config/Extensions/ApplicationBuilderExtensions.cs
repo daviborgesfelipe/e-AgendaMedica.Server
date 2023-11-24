@@ -1,7 +1,7 @@
 ﻿using e_AgendaMedica.Dominio.Compartilhado.Interfaces;
 using e_AgendaMedica.Infra.MassaDados;
 
-namespace e_AgendaMedica.WebApi.Config
+namespace e_AgendaMedica.WebApi.Config.Extensions
 {
     public static class ApplicationBuilderExtensions
     {

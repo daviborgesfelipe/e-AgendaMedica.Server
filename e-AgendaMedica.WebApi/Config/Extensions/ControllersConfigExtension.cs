@@ -3,7 +3,7 @@ using e_AgendaMedica.WebApi.Config.Converters;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 
-namespace e_AgendaMedica.WebApi.Config
+namespace e_AgendaMedica.WebApi.Config.Extensions
 {
     public static class ControllersConfigExtension
     {

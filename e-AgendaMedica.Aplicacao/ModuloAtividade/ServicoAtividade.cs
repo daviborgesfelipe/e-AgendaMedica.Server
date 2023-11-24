@@ -1,10 +1,10 @@
-﻿using AutoMapper;
-using e_AgendaMedica.Aplicacao.Compartilhado;
+﻿using e_AgendaMedica.Aplicacao.Compartilhado;
 using e_AgendaMedica.Dominio.Compartilhado.Interfaces;
 using e_AgendaMedica.Dominio.ModuloAtividade;
 using e_AgendaMedica.Dominio.ModuloAtividade.Interfaces;
 using e_AgendaMedica.Dominio.ModuloMedico.Interfaces;
 using FluentResults;
+using AutoMapper;      
 using Serilog;
 
 
@@ -119,7 +119,7 @@ namespace e_AgendaMedica.Aplicacao.ModuloAtividade
 
             await contextoPersistencia.GravarDadosAsync();
 
-            return Result.Ok();
+            return Result.Ok(atividade);
         }
 
         public async Task<Result<Atividade>> ExcluirAsync(Atividade atividade)
@@ -135,34 +135,7 @@ namespace e_AgendaMedica.Aplicacao.ModuloAtividade
         {
             var listaAtividadesNoPeriodo = await repositorioAtividade.ObterAtividadesNoPeriodoAsync(dataInicio, dataFim);
 
-            var horasTrabalhadasPorMedico = new Dictionary<Guid, TimeSpan>();
-
-            foreach (var atividade in listaAtividadesNoPeriodo)
-            {
-                var atividadeComMedico = await ObterPorIdAsync(atividade.Id);
-                foreach (var medico in atividadeComMedico.Value.ListaMedicos)
-                {
-                    if (!horasTrabalhadasPorMedico.ContainsKey(medico.Id))
-                    {
-                        horasTrabalhadasPorMedico[medico.Id] = TimeSpan.Zero;
-                    }
-
-                    horasTrabalhadasPorMedico[medico.Id] += atividade.HorarioTermino - atividade.HorarioInicio;
-                }
-            }
-
-            var listaIdsMedicosMaisHorasTrabalhadas = 
-                    horasTrabalhadasPorMedico.OrderByDescending(medicoHoras => medicoHoras.Value)
-                                  .Take(10)
-                                  .Select(medicoHoras => medicoHoras.Key)
-                                  .ToList();
-
-            var listaMedicos = await repositorioMedico.ObterMuitos(listaIdsMedicosMaisHorasTrabalhadas);
-            
-            var listaMedicosFinal = mapeador.Map<List<MedicoComHorasVM>>(listaMedicos.ToResult().Value);
-            
-            foreach (var medico in listaMedicosFinal)
-                medico.TotalHorasTrabalhadas += horasTrabalhadasPorMedico.GetValueOrDefault(medico.Id, TimeSpan.Zero);
+            List<MedicoComHorasVM> listaMedicosFinal = await FormatarListaMedicos(listaAtividadesNoPeriodo);
 
             return Result.Ok(listaMedicosFinal);
         }
@@ -186,24 +159,28 @@ namespace e_AgendaMedica.Aplicacao.ModuloAtividade
             return atividade.TipoAtividade == TipoAtividadeEnum.Cirurgia;
         }
 
-        private async Task<bool> VerificarTempoRecuperacaoNecessario(Atividade atividade)
+        private async Task<bool> VerificarTempoRecuperacaoNecessario(Atividade atividadeAtual)
         {
-            foreach (var medico in atividade.ListaMedicos)
+            foreach (var medico in atividadeAtual.ListaMedicos)
             {
-                var tempoRecuperacaoNecessario = atividade.TipoAtividade == TipoAtividadeEnum.Cirurgia
+                var tempoRecuperacaoNecessario = atividadeAtual.TipoAtividade == TipoAtividadeEnum.Cirurgia
                     ? TimeSpan.FromHours(4)
                     : TimeSpan.FromMinutes(20);
 
-                var atividadeConcluida = await repositorioAtividade.ObterAtividadesDoMedicoAsync(medico.Id);
+                var _atividadesMedicoDb = await repositorioAtividade.ObterAtividadesDoMedicoAsync(medico.Id);
                 
-                foreach (var item in atividadeConcluida)
+                foreach (var _ativ in _atividadesMedicoDb)
                 {
-                    var diferencaAtual2 = atividade.HorarioInicio - item.HorarioTermino;
+                    var diferencaAtual = atividadeAtual.HorarioInicio - _ativ.HorarioTermino;
                     
-                    if (item.Data == atividade.Data
-                    && diferencaAtual2 <= tempoRecuperacaoNecessario)
+                    if(_ativ.Data == atividadeAtual.Data
+                        && 
+                        diferencaAtual <= tempoRecuperacaoNecessario 
+                        && 
+                        (_ativ.Id != atividadeAtual.Id)
+                    )
                     {
-                        Log.Logger.Warning("Tempo de recuperação insuficiente para atividade do médico {MedicoId}. Atividade de Id:{AtividadeId}", medico.Id, atividade.Id);
+                        Log.Logger.Warning("Tempo de recuperação insuficiente para atividade do médico {MedicoId}. Atividade de Id:{AtividadeId}", medico.Id, atividadeAtual.Id);
                         return false;
                     }
                 }
@@ -214,6 +191,38 @@ namespace e_AgendaMedica.Aplicacao.ModuloAtividade
 
         #endregion
 
+        private async Task<List<MedicoComHorasVM>> FormatarListaMedicos(List<Atividade> listaAtividadesNoPeriodo)
+        {
+            var horasTrabalhadasPorMedico = new Dictionary<Guid, TimeSpan>();
+
+            foreach (var atividade in listaAtividadesNoPeriodo)
+            {
+                var atividadeComMedico = await ObterPorIdAsync(atividade.Id);
+                foreach (var medico in atividadeComMedico.Value.ListaMedicos)
+                {
+                    if (!horasTrabalhadasPorMedico.ContainsKey(medico.Id))
+                    {
+                        horasTrabalhadasPorMedico[medico.Id] = TimeSpan.Zero;
+                    }
+
+                    horasTrabalhadasPorMedico[medico.Id] += atividade.HorarioTermino - atividade.HorarioInicio;
+                }
+            }
+
+            var listaIdsMedicosMaisHorasTrabalhadas =
+                    horasTrabalhadasPorMedico.OrderByDescending(medicoHoras => medicoHoras.Value)
+                                  .Take(10)
+                                  .Select(medicoHoras => medicoHoras.Key)
+                                  .ToList();
+
+            var listaMedicos = await repositorioMedico.ObterMuitos(listaIdsMedicosMaisHorasTrabalhadas);
+
+            var listaMedicosFinal = mapeador.Map<List<MedicoComHorasVM>>(listaMedicos.ToResult().Value);
+
+            foreach (var medico in listaMedicosFinal)
+                medico.TotalHorasTrabalhadas += horasTrabalhadasPorMedico.GetValueOrDefault(medico.Id, TimeSpan.Zero);
+            return listaMedicosFinal;
+        }
 
     }
 }
