@@ -56,6 +56,11 @@ namespace e_AgendaMedica.Aplicacao.ModuloMedico
 
         public async Task<Result<Medico>> EditarAsync(Medico medico)
         {
+            var resultadoValidacao = Validar(medico);
+
+            if (resultadoValidacao.IsFailed)
+                return Result.Fail(resultadoValidacao.Errors);
+
             await repositorioMedico.EditarAsync(medico);
 
             await contextoPersistencia.GravarDadosAsync();
