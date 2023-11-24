@@ -25,6 +25,9 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloAtividade
         [ProducesResponseType(typeof(string[]), 500)]
         public async Task<IActionResult> Post([FromBody] InserirAtividadeViewModel atividadeViewModel)
         {
+            if (atividadeViewModel == null)
+                return BadRequest(new List<IError> { new Error("Nenhuma propriedade detectada para a atividade.") });
+
             var atividadeMap = mapeador.Map<Atividade>(atividadeViewModel);
 
             var resultadoPost = await servicoAtividade.InserirAsync(atividadeMap);
@@ -52,6 +55,9 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloAtividade
         [ProducesResponseType(typeof(string[]), 500)]
         public async Task<IActionResult> GetCompleteById(Guid id)
         {
+            if (id == null)
+                return BadRequest(new List<IError> { new Error("Nenhum id detectado para a atividade.") });
+
             var resultadoGet = await servicoAtividade.ObterPorIdAsync(id);
 
             if (resultadoGet.IsFailed)
@@ -66,6 +72,9 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloAtividade
         [ProducesResponseType(typeof(string[]), 500)]
         public async Task<IActionResult> GetById(Guid id)
         {
+            if (id == null)
+                return BadRequest(new List<IError> { new Error("Nenhum id detectado para a atividade.") });
+
             var resultadoGet = await servicoAtividade.ObterPorIdAsync(id);
 
             if (resultadoGet.IsFailed)
@@ -84,6 +93,12 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloAtividade
             EditarAtividadeViewModel atividadeViewModel
         )
         {
+            if (id == null)
+                return BadRequest(new List<IError> { new Error("Nenhum id detectado para a atividade.") });
+
+            if (atividadeViewModel == null)
+                return BadRequest(new List<IError> { new Error("Nenhuma alteração detectada para a atividade.") });
+
             var resultadoGet = await servicoAtividade.ObterPorIdAsync(id);
 
             if (resultadoGet.IsFailed)
@@ -103,6 +118,9 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloAtividade
         [ProducesResponseType(typeof(string[]), 500)]
         public async Task<IActionResult> DeleteById(Guid id)
         {
+            if (id == null)
+                return BadRequest(new List<IError> { new Error("Nenhum id detectado para a atividade.") });
+
             var resultadoSelecao = await servicoAtividade.ObterPorIdAsync(id);
 
             if (resultadoSelecao.IsFailed)
@@ -119,6 +137,11 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloAtividade
         [ProducesResponseType(typeof(string[]), 500)]
         public async Task<IActionResult> ObterMedicosMaisHorasTrabalhadas( DateTime dataInicio, DateTime dataTermino)//route constraint
         {
+            var resultadoValidacao = ValidarDatas(dataInicio, dataTermino);
+
+            if (resultadoValidacao.IsFailed)
+                return BadRequest(resultadoValidacao.Errors);
+
             var resultadoGet = await servicoAtividade.ObterMedicosMaisHorasTrabalhadas(dataInicio, dataTermino);
 
             if (resultadoGet.IsFailed)
@@ -126,6 +149,19 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloAtividade
 
             return Ok(mapeador.Map<List<MedicoComHorasVM>>(resultadoGet.Value));
 
+        }
+        private Result ValidarDatas(DateTime dataInicio, DateTime dataTermino)
+        {
+            if (dataInicio == DateTime.MinValue && dataTermino == DateTime.MinValue)
+                return Result.Fail("Data de início e data de término estão ausentes.");
+
+            if (dataInicio == DateTime.MinValue)
+                return Result.Fail("Data de início está ausente.");
+
+            if (dataTermino == DateTime.MinValue)
+                return Result.Fail("Data de término está ausente.");
+
+            return Result.Ok();
         }
     }
 }
