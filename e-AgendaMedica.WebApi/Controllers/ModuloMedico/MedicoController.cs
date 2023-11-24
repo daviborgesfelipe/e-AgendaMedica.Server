@@ -25,11 +25,14 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloMedico
         [ProducesResponseType(typeof(string[]), 500)]
         public async Task<IActionResult> Post(InserirMedicoViewModel medicoViewModel)
         {
-            var contatoMap = mapeador.Map<Medico>(medicoViewModel);
+            if (medicoViewModel == null)
+                return BadRequest(new List<IError> { new Error("Nenhuma propriedade detectada para o médico.") });
 
-            var resultadoPost = await servicoMedico.InserirAsync(contatoMap);
+            var medicoMap = mapeador.Map<Medico>(medicoViewModel);
 
-            return ProcessarResultado(resultadoPost.ToResult(), contatoMap);
+            var resultadoPost = await servicoMedico.InserirAsync(medicoMap);
+
+            return ProcessarResultado(resultadoPost.ToResult(), medicoMap);
         }
 
         [HttpGet]
@@ -52,6 +55,9 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloMedico
         [ProducesResponseType(typeof(string[]), 500)]
         public async Task<IActionResult> GetCompleteById(Guid id)
         {
+            if (id == null)
+                return BadRequest(new List<IError> { new Error("Nenhum id detectado para o médico.") });
+
             var resultadoGet = await servicoMedico.ObterPorIdAsync(id);
 
             if (resultadoGet.IsFailed)
@@ -66,6 +72,9 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloMedico
         [ProducesResponseType(typeof(string[]), 500)]
         public async Task<IActionResult> GetById(Guid id)
         {
+            if (id == null)
+                return BadRequest(new List<IError> { new Error("Nenhum id detectado para o médico.") });
+
             var resultadoGet = await servicoMedico.ObterPorIdAsync(id);
 
             if (resultadoGet.IsFailed)
@@ -84,10 +93,16 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloMedico
             EditarMedicoViewModel medicoViewModel
         )
         {
+            if (id == null)
+                return BadRequest(new List<IError> { new Error("Nenhum id detectado para o médico.") });
+
+            if (medicoViewModel == null)
+                return BadRequest(new List<IError> { new Error("Nenhuma alteração detectada para o médico.") }); 
+
             var resultadoGet = await servicoMedico.ObterPorIdAsync(id);
 
             if (resultadoGet.IsFailed)
-                return NotFound(resultadoGet.Errors);
+                return NotFound(resultadoGet.Errors);                
 
             var medico = mapeador.Map(medicoViewModel, resultadoGet.Value);
 
@@ -103,6 +118,9 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloMedico
         [ProducesResponseType(typeof(string[]), 500)]
         public async Task<IActionResult> DeleteById(Guid id)
         {
+            if (id == null)
+                return BadRequest(new List<IError> { new Error("Nenhum id detectado para o médico.") });
+            
             var resultadoSelecao = await servicoMedico.ObterPorIdAsync(id);
 
             if (resultadoSelecao.IsFailed)
