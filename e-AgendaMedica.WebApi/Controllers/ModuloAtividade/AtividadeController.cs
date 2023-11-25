@@ -1,5 +1,6 @@
 ﻿using e_AgendaMedica.Dominio.ModuloAtividade;
 using e_AgendaMedica.Dominio.ModuloAtividade.Interfaces;
+using e_AgendaMedica.Dominio.ModuloMedico.Interfaces;
 using e_AgendaMedica.WebApi.Controllers.Compartilhado;
 using e_AgendaMedica.WebApi.ViewModels.ModuloAtividade;
 using e_AgendaMedica.WebApi.ViewModels.ModuloMedico;
@@ -12,11 +13,13 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloAtividade
     {
         private IMapper mapeador;
         private IServicoAtividade servicoAtividade;
+        private IServicoMedico servicoMedico;
 
-        public AtividadeController(IMapper mapeador, IServicoAtividade servicoMedico)
+        public AtividadeController(IMapper mapeador, IServicoAtividade servicoAtividade, IServicoMedico servicoMedico)
         {
             this.mapeador = mapeador;
-            this.servicoAtividade = servicoMedico;
+            this.servicoAtividade = servicoAtividade;
+            this.servicoMedico = servicoMedico;
         }
 
         [HttpPost]
@@ -105,6 +108,15 @@ namespace e_AgendaMedica.WebApi.Controllers.ModuloAtividade
                 return NotFound(resultadoGet.Errors);
 
             Atividade atividade = mapeador.Map(atividadeViewModel, resultadoGet.Value);
+
+            atividade.ListaMedicos.Clear();
+
+            foreach (var medicoId in atividadeViewModel.ListaMedicos)
+            {
+                var medico = await servicoMedico.ObterPorIdAsync(medicoId);
+
+                atividade.RegistrarMedico(medico.Value);
+            }
 
             var resultadoPut = await servicoAtividade.EditarAsync(atividade);
 

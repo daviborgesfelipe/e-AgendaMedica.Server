@@ -65,15 +65,6 @@ namespace e_AgendaMedica.Dominio.ModuloAtividade
             return false;
         }
 
-        public bool ValidarTipoAtividade()
-        {
-            if (true)
-            {
-
-            }
-            return false;
-        }
-
         public void RemoverMedico(Medico medico)
         {
             ListaMedicos.Remove(medico);
