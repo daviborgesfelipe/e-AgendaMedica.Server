@@ -62,7 +62,7 @@ o build da solution ocorrer. **Utilize a versão 5.11.0 do Nuget.**
 
 ## Executar o projeto
 
-* Na barra de ferramentas superior do **Visual Studio 2022**, na opcao **Startup Project** escolha o projeto **e-AgendaMedica.WebApi** e inicie a aplicação, o projeto irá iniciar em um servidor no IIS Express no endereço **http://localhost:7186**
+* Na barra de ferramentas superior do **Visual Studio 2022**, na opcao **Startup Project** escolha o projeto **e-AgendaMedica.WebApi** e inicie a aplicação, o projeto irá iniciar no endereço **http://localhost:7186**
 
 * Por padrão, a API irá abrir o **Swagger**, que dará toda a visão de funcionamento da API, bem como sua documentação.
 
