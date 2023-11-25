@@ -20,21 +20,22 @@ namespace e_AgendaMedica.Dominio.Tests.ModuloMedico
         }
 
         [TestMethod]
-        public void Deve_Passar_Quando_Medico_Valido()
+        public void nome_do_medico_deve_conter_no_minimo_dois_char()
         {
-            // Arrange
-            var medico = new Medico { Nome = "Dr. Smith", Especialidade = "Cardiologista", CRM = "12345-SC" };
-            var validador = new ValidadorMedico();
+            //arrange
+            medico = new Medico { Nome = "D", Especialidade = "Cardiologista", CRM = "12345-SC" };
 
-            // Act
+            ValidadorMedico validador = new ValidadorMedico();
+
+            //action
             var resultado = validador.Validate(medico);
 
-            // Assert
-            Assert.IsTrue(resultado.IsValid);
+            //assert
+            Assert.AreEqual("O campo nome deve conter no minimo 2 caracteres", resultado.Errors[0].ErrorMessage);
         }
 
         [TestMethod]
-        public void Deve_Falhar_Quando_Nome_Nulo()
+        public void nome_nulo_deve_falhar()
         {
             // Arrange
             var medico = new Medico { Nome = null, Especialidade = "Cardiologista", CRM = "12345-SC" };
@@ -49,7 +50,22 @@ namespace e_AgendaMedica.Dominio.Tests.ModuloMedico
         }
 
         [TestMethod]
-        public void Deve_Falhar_Quando_CRM_Nulo()
+        public void especialidade_do_medico_deve_conter_no_minimo_dois_char()
+        {
+            //arrange
+            medico = new Medico { Nome = "Davi", Especialidade = "Ca", CRM = "12345-SC" };
+
+            ValidadorMedico validador = new ValidadorMedico();
+
+            //action
+            var resultado = validador.Validate(medico);
+
+            //assert
+            Assert.AreEqual("O campo especialidade deve conter no minimo 3 caracteres", resultado.Errors[0].ErrorMessage);
+        }
+
+        [TestMethod]
+        public void crm_nao_deve_ser_nulo()
         {
             // Arrange
             var medico = new Medico { Nome = "Dr. Smith", Especialidade = "Cardiologista", CRM = null };
@@ -64,7 +80,22 @@ namespace e_AgendaMedica.Dominio.Tests.ModuloMedico
         }
 
         [TestMethod]
-        public void Deve_Registrar_Atividade_Corretamente()
+        public void crm_deve_falhar_formato_invalido()
+        {
+            // Arrange
+            var medico = new Medico { Nome = "Dr. Smith", Especialidade = "Cardiologista", CRM = "123456-XX" };
+            var validador = new ValidadorMedico();
+
+            // Act
+            var resultado = validador.Validate(medico);
+
+            // Assert
+            Assert.IsFalse(resultado.IsValid);
+            Assert.IsTrue(resultado.Errors.Any(x => x.PropertyName == nameof(Medico.CRM)));
+        }
+
+        [TestMethod]
+        public void nao_deve_dar_erro_registrar_atividade_corretamente_no_medico()
         {
             // Arrange
             var medico = new Medico { Nome = "Dr. Smith", Especialidade = "Cardiologista", CRM = "12345-SC" };
@@ -78,7 +109,7 @@ namespace e_AgendaMedica.Dominio.Tests.ModuloMedico
         }
 
         [TestMethod]
-        public void Nao_Deve_Registrar_Atividade_Duplicada()
+        public void nao_deve_registrar_atividade_duplicada()
         {
             // Arrange
             var medico = new Medico { Nome = "Dr. Smith", Especialidade = "Cardiologista", CRM = "12345-SC" };
@@ -93,18 +124,18 @@ namespace e_AgendaMedica.Dominio.Tests.ModuloMedico
         }
 
         [TestMethod]
-        public void Deve_Falhar_Quando_CRM_Invalido()
+        public void nao_deve_dar_erro_quando_medico_valido()
         {
             // Arrange
-            var medico = new Medico { Nome = "Dr. Smith", Especialidade = "Cardiologista", CRM = "123456-XX" };
+            var medico = new Medico { Nome = "Dr. Smith", Especialidade = "Cardiologista", CRM = "12345-SC" };
             var validador = new ValidadorMedico();
 
             // Act
             var resultado = validador.Validate(medico);
 
             // Assert
-            Assert.IsFalse(resultado.IsValid);
-            Assert.IsTrue(resultado.Errors.Any(x => x.PropertyName == nameof(Medico.CRM)));
+            Assert.IsTrue(resultado.IsValid);
         }
+
     }
 }
