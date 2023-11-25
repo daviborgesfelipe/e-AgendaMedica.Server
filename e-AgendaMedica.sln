@@ -29,9 +29,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Massa de Dados", "Massa de 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "e-AgendaMedica.Infra.MassaDados", "e-AgendaMedica.Infra.MassaDados\e-AgendaMedica.Infra.MassaDados.csproj", "{8F278AD2-81FE-4C3A-BF56-5F5F466ECFFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "e-AgendaMedica.Dominio.Tests", "e-AgendaMedica.Dominio.Tests\e-AgendaMedica.Dominio.Tests.csproj", "{3103515F-D7E8-43C6-8C58-890279E73399}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "e-AgendaMedica.Dominio.Tests", "e-AgendaMedica.Dominio.Tests\e-AgendaMedica.Dominio.Tests.csproj", "{3103515F-D7E8-43C6-8C58-890279E73399}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "e-AgendaMedica.Infra.Orm.Tests", "e-AgendaMedica.Infra.Orm.Tests\e-AgendaMedica.Infra.Orm.Tests.csproj", "{06B40EAE-57BC-49D3-99ED-855B7A81DB2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "e-AgendaMedica.Infra.Orm.Tests", "e-AgendaMedica.Infra.Orm.Tests\e-AgendaMedica.Infra.Orm.Tests.csproj", "{06B40EAE-57BC-49D3-99ED-855B7A81DB2D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testes Unidade", "Testes Unidade", "{F33F9FED-10C2-4CE8-B91E-5D5CBE212DD8}"
 EndProject
