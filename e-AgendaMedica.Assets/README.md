@@ -3,6 +3,12 @@
 O E-Agenda Médica é uma ASP.NET Core Web API desenvolvida com o objetivo de ser um projeto dedicado à gestão e organização do cronograma de uma clínica. Esta clínica, por sua vez, é um centro onde diversas atividades, como cirurgias e consultas, são realizadas.
 
 Construído por Davi Felipe Borges - @daviborgesfelipe. [LinkedIn](https://www.linkedin.com/in/davi-borges-felipe/)
+## Ações Disponiveis 
+
+<div style="display: flex; justify-content: space-around;">
+    <img src="./ativ-endpoints.png" width="400" alt="e-Agenda Médica Atividade">
+    <img src="./med-endpoints.png" width="400" alt="e-Agenda Médica Médico">
+</div>
 
 ## Tecnologias
 
@@ -54,6 +60,11 @@ Para alterar ou executar a API é necessário o **Visual Studio 2022**.
 
 ### Instalar dependências do back-end
 
+<div style="display: flex; justify-content: space-around;">
+    <img src="./ativ-endpoints.png" width="400" alt="e-Agenda Médica Atividade">
+    <img src="./med-endpoints.png" width="400" alt="e-Agenda Médica Médico">
+</div>
+
 Ao abrir a solução do projeto existente na pasta **e-AgendaMedica.Server**, o Nuget é responsável por restaurar as dependências quando
 o build da solution ocorrer. **Utilize a versão 5.11.0 do Nuget.**
 
@@ -62,7 +73,7 @@ o build da solution ocorrer. **Utilize a versão 5.11.0 do Nuget.**
 
 ## Executar o projeto
 
-* Na barra de ferramentas superior do **Visual Studio 2022**, na opcao **Startup Project** escolha o projeto **e-AgendaMedica.WebApi** e inicie a aplicação, o projeto irá iniciar no endereço **http://localhost:7186**
+* Na barra de ferramentas superior do **Visual Studio 2022**, na opcao **Startup Project** escolha o projeto **e-AgendaMedica.WebApi** e inicie a aplicação, o projeto irá iniciar no endereço **http://localhost:**
 
 * Por padrão, a API irá abrir o **Swagger**, que dará toda a visão de funcionamento da API, bem como sua documentação.
 
@@ -71,3 +82,9 @@ o build da solution ocorrer. **Utilize a versão 5.11.0 do Nuget.**
 Em caso de dúvidas, entre em contato! [LinkedIn](https://www.linkedin.com/in/davi-borges-felipe/)
 Obrigado.
 
+<style>
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+</style>
