@@ -6,8 +6,8 @@ Desenvolvido por Davi Felipe Borges - @daviborgesfelipe. [LinkedIn](https://www.
 ## Ações Disponiveis 
 
 <div style="display: flex; justify-content: space-around;">
-    <img  style="max-width: 100%; height: auto;" src="ativ-endpoints.png" width="400"  alt="e-Agenda Médica Atividade">
-    <img  style="max-width: 100%; height: auto;" src="med-endpoints.png" width="400" alt="e-Agenda Médica Médico">
+    <img  style="max-width: 100%;" src="ativ-endpoints.png" width="400" height: 300 alt="e-Agenda Médica Atividade">
+    <img  style="max-width: 100%;" src="med-endpoints.png" width="400" height: 300 alt="e-Agenda Médica Médico">
 </div>
 
 ## Tecnologias
